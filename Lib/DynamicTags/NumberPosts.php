@@ -49,6 +49,16 @@ class NumberPosts extends \Elementor\Core\DynamicTags\Tag {
                 'multiple' => true,
             ]
         );
+        $this->add_control(
+            'custom-query',
+            [
+                'label' => __( 'Custom-Query', 'dynamic-tags' ),
+                'type' => Controls_Manager::TEXTAREA,
+                'label_block' => true,
+                'default' => '',
+                'description' => __( 'One per line, example: <br />post_parent=17', 'dynamic-tags' ),
+            ]
+        );
     }
 
     /**
@@ -71,13 +81,27 @@ class NumberPosts extends \Elementor\Core\DynamicTags\Tag {
      */
     public function render() {
         $settings = $this->get_settings();
-        $posts = get_posts( [
+        $args = [
             'category' => implode( ',', $settings['category'] ),
             'post_type' => empty( $settings['posttypes'] ) ? 'any' : $settings['posttypes'],
             'numberposts' => -1,
             'posts_per_page' => -1,
             'fields' => 'ids',
-        ] );
+        ];
+
+        if ( !empty( $settings['custom-query'] ) ) {
+            $lines = explode( "\n", $settings['custom-query'] );
+            foreach ( $lines as $line ) {
+                $line = explode( '=', $line );
+                if ( !count( $line ) !== 2 ) {
+                    continue;
+                }
+
+                $args[$line[0]] = $line[1];
+            }
+        }
+
+        $posts = get_posts( $args );
 
         echo count( $posts );
     }
