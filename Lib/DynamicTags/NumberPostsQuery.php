@@ -5,16 +5,16 @@ namespace DynamicTags\Lib\DynamicTags;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
-class NumberPosts extends \Elementor\Core\DynamicTags\Tag {
+class NumberPostsQuery extends \Elementor\Core\DynamicTags\Tag {
     const WRAPPED_TAG = false;
     public static $dtCount = 0;
 
     public function get_name() {
-        return 'rto-collection-numberposts';
+        return 'rto-collection-numberposts-query';
     }
 
     public function get_title() {
-        return __( 'Number posts', 'dynamic-tags' );
+        return __( 'Number posts query', 'dynamic-tags' );
     }
 
     public function get_group() {
@@ -56,7 +56,7 @@ class NumberPosts extends \Elementor\Core\DynamicTags\Tag {
                 'type' => Controls_Manager::TEXTAREA,
                 'label_block' => true,
                 'default' => '',
-                'description' => __( 'One per line, example: <br />post_parent=17', 'dynamic-tags' ),
+                'description' => __( 'One per line, example:', 'dynamic-tags' ) . '<br />post_parent=17<br />post_type=page',
             ]
         );
     }
@@ -89,11 +89,12 @@ class NumberPosts extends \Elementor\Core\DynamicTags\Tag {
             'fields' => 'ids',
         ];
 
+
         if ( !empty( $settings['custom-query'] ) ) {
             $lines = explode( "\n", $settings['custom-query'] );
             foreach ( $lines as $line ) {
                 $line = explode( '=', $line );
-                if ( !count( $line ) !== 2 ) {
+                if ( count( $line ) !== 2 ) {
                     continue;
                 }
 
