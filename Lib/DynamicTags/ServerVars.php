@@ -1,0 +1,65 @@
+<?php
+
+namespace DynamicTags\Lib\DynamicTags;
+
+use Elementor\Core\DynamicTags\Tag;
+use Elementor\Controls_Manager;
+use ElementorPro\Modules\DynamicTags\Module;
+
+if ( !defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly
+}
+
+class ServerVars extends Tag {
+    public function get_name() {
+        return 'rto-collection-server-vars';
+    }
+
+    public function get_title() {
+        return __( 'Server Variables', 'dynamic-tags' );
+    }
+
+    public function get_group() {
+        return Module::SITE_GROUP;
+    }
+
+    public function get_categories() {
+        return [ Module::TEXT_CATEGORY ];
+    }
+
+    protected function _register_controls() {
+        $options = [];
+        foreach ( array_keys( $_SERVER ) as $key ) {
+            $options[$key] = $key;
+        }
+
+        if ( empty( $options['HTTP_REFERER'] ) ) {
+            $options['HTTP_REFERER'] = 'HTTP_REFERER';
+        }
+
+        $this->add_control(
+            'variable',
+            [
+                'label' => __( 'Variable', 'rto-collection' ),
+                'type' => Controls_Manager::SELECT,
+                'label_block' => true,
+                'default' => [],
+                'options' => $options,
+
+            ]
+        );
+    }
+
+    public function get_panel_template_setting_key() {
+        return 'variable';
+    }
+
+    public function render() {
+        $settings = $this->get_settings();
+        $key = $settings['variable'];
+        if ( empty( $key ) ) {
+            return;
+        }
+        echo $_SERVER[$key] ?? '';
+    }
+}
