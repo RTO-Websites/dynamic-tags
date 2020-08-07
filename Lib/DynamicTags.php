@@ -2,6 +2,7 @@
 
 use DynamicTags\Admin\DynamicTagsAdmin;
 use DynamicTags\Pub\DynamicTagsPublic;
+use Elementor\Core\DynamicTags\Manager;
 
 /**
  * The file that defines the core plugin class
@@ -58,6 +59,13 @@ class DynamicTags {
 	 */
 	protected $version;
 
+
+    private static $includeDirs = [
+        DynamicTags_DIR . '/Lib',
+    ];
+
+    const DynamicTagsNamespace = 'DynamicTags\\Lib\\';
+
 	/**
 	 * Define the core functionality of the plugin.
 	 *
@@ -76,6 +84,7 @@ class DynamicTags {
 		$this->setLocale();
 		$this->defineAdminHooks();
 		$this->definePublicHooks();
+        $this->defineElementorHooks();
 
 	}
 
@@ -150,6 +159,44 @@ class DynamicTags {
 		$this->loader->addAction( 'wp_enqueue_scripts', $pluginPublic, 'enqueueScripts' );
 
 	}
+
+    public function defineElementorHooks() {
+        $this->getLoader()->addAction( 'elementor/dynamic_tags/register_tags', $this, 'registerDynamicTags', 10, 1 );
+    }
+
+    /**
+     * Register dynamic tags
+     *
+     * @param Manager $dynamicTags
+     */
+    public function registerDynamicTags( $dynamicTags ) {
+        foreach ( self::$includeDirs as $includeDir ) {
+            $dir = $includeDir . '/DynamicTags';
+            foreach ( scandir( $dir ) as $tag ) {
+                $className = explode( '.php', $tag )[0];
+                $fullClassName = self::DynamicTagsNamespace . 'DynamicTags\\' . $className;
+                if ( !file_exists( $dir . '/' . $tag ) || is_dir( $dir . '/' . $tag ) ) {
+                    continue;
+                }
+
+                include_once( $dir . '/' . $tag );
+
+                $exists = false;
+                if ( class_exists( $fullClassName ) ) {
+                    $className = $fullClassName;
+                    $exists = true;
+                } else if ( class_exists( $className ) ) {
+                    $exists = true;
+                }
+
+                if ( !$exists ) {
+                    continue;
+                }
+
+                $dynamicTags->register_tag( $className );
+            }
+        }
+    }
 
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of
