@@ -22,7 +22,7 @@ class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return [ Module::TEXT_CATEGORY, Module::URL_CATEGORY ];
     }
 
     protected function _register_controls() {
@@ -56,24 +56,24 @@ class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Tag {
         }
 
 
-        $imageData = get_avatar_data($userId,[
+        $imageData = get_avatar_data( $userId, [
             'default' => '404',
 
-        ]);
+        ] );
 
-        if (empty($imageData) || empty( $imageData['url'])) {
+        if ( empty( $imageData ) || empty( $imageData['url'] ) ) {
             return;
         }
 
-        $ch = curl_init($imageData['url']);
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-        curl_setopt($ch,CURLOPT_TIMEOUT,10);
-        curl_setopt($ch, CURLOPT_HEADER  , true);  // we want headers
-        curl_setopt($ch, CURLOPT_NOBODY  , true);  // we don't need body
-        curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $ch = curl_init( $imageData['url'] );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
+        curl_setopt( $ch, CURLOPT_HEADER, true );  // we want headers
+        curl_setopt( $ch, CURLOPT_NOBODY, true );  // we don't need body
+        curl_exec( $ch );
+        $httpcode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 
-        if ($httpcode == 404) {
+        if ( $httpcode == 404 ) {
             echo $httpcode;
             return;
         }
