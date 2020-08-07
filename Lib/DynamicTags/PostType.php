@@ -11,7 +11,7 @@ if ( !defined( 'ABSPATH' ) ) {
 
 class PostType extends Tag {
     public function get_name() {
-        return 'dynamic-tags-post-parent';
+        return 'dynamic-tags-post-type';
     }
 
     public function get_title() {
