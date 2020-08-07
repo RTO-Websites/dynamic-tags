@@ -30,11 +30,8 @@ Class IsAuthorOfPost extends \Elementor\Core\DynamicTags\Tag {
     public function render() {
         $userId = get_current_user_id();
         $authorId = get_the_author_meta( 'ID' );
-        if ( $userId === $authorId ) {
-            echo 'true';
-        } else {
-            echo 'false';
-        }
+
+        echo $userId === $authorId;
     }
 
 }

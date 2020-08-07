@@ -5,7 +5,7 @@ namespace DynamicTags\Lib\DynamicTags;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
-Class IsPostAmong extends \Elementor\Core\DynamicTags\Tag {
+class IsPostAmong extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
         return 'rto-collection-is-post-among';
@@ -52,11 +52,7 @@ Class IsPostAmong extends \Elementor\Core\DynamicTags\Tag {
             array_push( $query, $Ids[$settings['ids'][$i]] );
         }
 
-        if ( in_array( get_the_ID(), $query ) ) {
-            echo "true";
-        } else {
-            echo "false";
-        }
+        echo in_array( get_the_ID(), $query );
     }
 
     private function getIds() {

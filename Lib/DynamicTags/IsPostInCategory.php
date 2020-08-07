@@ -53,11 +53,7 @@ class IsPostInCategory extends \Elementor\Core\DynamicTags\Tag {
             array_push( $query, $categories[$settings['categories'][$i]] );
         }
 
-        if ( in_category( $query ) ) {
-            echo "true";
-        } else {
-            echo "false";
-        }
+        echo in_category( $query );
     }
 
     private function getCategories() {

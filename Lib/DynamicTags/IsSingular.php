@@ -28,10 +28,6 @@ class IsSingular extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        if ( is_singular() ) {
-            echo "true";
-        } else {
-            echo "false";
-        }
+        echo is_singular();
     }
 }

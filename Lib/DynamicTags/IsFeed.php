@@ -28,11 +28,6 @@ class IsFeed extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-
-        if ( is_feed() ) {
-            echo "true";
-        } else {
-            echo "false";
-        }
+        echo is_feed();
     }
 }

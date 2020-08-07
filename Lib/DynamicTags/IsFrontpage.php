@@ -28,11 +28,7 @@ Class IsFrontpage extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        if ( is_front_page() ) {
-            echo "true";
-        } else {
-            echo "false";
-        }
+        echo is_frontpage();
     }
 
 

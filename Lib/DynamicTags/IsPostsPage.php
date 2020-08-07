@@ -30,11 +30,7 @@ class IsPostsPage extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        if ( is_home() ) {
-            echo "true";
-        } else {
-            echo "false";
-        }
+        echo is_home();
     }
 
 }
