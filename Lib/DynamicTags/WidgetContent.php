@@ -1,0 +1,113 @@
+<?php
+
+namespace DynamicTags\Lib\DynamicTags;
+
+use Elementor\Controls_Manager;
+use Elementor\Plugin;
+use Elementor\Widget_Base;
+use ElementorPro\Modules\DynamicTags\Module;
+
+class WidgetContent extends \Elementor\Core\DynamicTags\Tag {
+
+    public function get_name() {
+
+        return 'rto-collection-widget-content';
+    }
+
+    public function get_title() {
+        return __( 'Widget Content', 'dynamic-tags' );
+    }
+
+
+    public function get_group() {
+        return [ Module::SITE_GROUP ];
+    }
+
+    public function get_categories() {
+        return [ Module::TEXT_CATEGORY ];
+    }
+
+    protected function _register_controls() {
+        $this->add_control(
+            'post-id',
+            [
+                'label' => __( 'Post ID' ),
+                'type' => Controls_Manager::TEXT,
+                'label_block' => true,
+                'default' => '',
+            ]
+        );
+        $this->add_control(
+            'widget-id',
+            [
+                'label' => __( 'Widget ID' ),
+                'type' => Controls_Manager::TEXT,
+                'label_block' => true,
+                'default' => '',
+            ]
+        );
+    }
+
+    public function render() {
+        if ( filter_input( INPUT_POST, 'action' ) === 'elementor_ajax' ) {
+            return;
+        }
+        $settings = $this->get_settings();
+
+        if ( empty( $settings['widget-id'] ) ) {
+            return;
+        }
+
+        $widgetId = $settings['widget-id'];
+        $postId = $settings['post-id'] ?: get_post()->ID;
+
+        if ( empty( $postId ) ) {
+            return;
+        }
+
+        $document = Plugin::$instance->documents->get_doc_for_frontend( $postId );
+
+        if ( empty( $document ) ) {
+            return;
+        }
+
+        $elementorData = $document->get_elements_data();
+
+        $flatData = [];
+        $this->makeFlat( $flatData, $elementorData );
+
+        if ( empty( $flatData[$widgetId] ) ) {
+            return;
+        }
+
+        $flatData[$widgetId]['id'] = $widgetId; // . '-copy';
+        /**
+         * @var $tempWidget Widget_Base
+         */
+        $tempWidget = Plugin::instance()->elements_manager->create_element_instance(
+            $flatData[$widgetId],
+            []
+        );
+        $tempWidget->print_element();
+    }
+
+    /**
+     * @param array &$flatData
+     * @param array $data
+     * @return mixed
+     */
+    private function makeFlat( &$flatData, $data ) {
+        foreach ( $data as $element ) {
+            if ( $element['elType'] === 'widget' ) {
+                $flatData[$element['id']] = $element;
+            }
+
+            if ( !empty( $element['elements'] ) ) {
+                $this->makeFlat( $flatData, $element['elements'] );
+            }
+        }
+
+        return $flatData;
+    }
+
+}
