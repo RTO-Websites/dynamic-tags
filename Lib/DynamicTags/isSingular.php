@@ -1,23 +1,22 @@
 <?php
 
+
 namespace DynamicTags\Lib\DynamicTags;
 
 use ElementorPro\Modules\DynamicTags\Module;
 
-Class UserRoleTag extends \Elementor\Core\DynamicTags\Tag {
-
+class isSingular extends \Elementor\Core\DynamicTags\Tag {
     public function get_name() {
-
-        return 'rto-collection-user-role';
+        return 'rto-collection-is-singular';
     }
 
     public function get_title() {
-        return __( 'User role', 'dynamic-tags' );
+        return __( 'Is singular', 'dynamic-tags' );
     }
 
 
     public function get_group() {
-        return [ Module::SITE_GROUP ];
+        return [ Module::POST_GROUP ];
     }
 
     public function get_categories() {
@@ -29,10 +28,10 @@ Class UserRoleTag extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        $userId = get_current_user_id();
-        $userInfo = get_userdata( $userId );
-        $userRoles = implode( ', ', $userInfo->roles );
-        echo $userRoles;
+        if ( is_singular() ) {
+            echo "true";
+        } else {
+            echo "false";
+        }
     }
-
 }
