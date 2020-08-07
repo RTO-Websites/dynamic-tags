@@ -5,7 +5,7 @@ namespace DynamicTags\Lib\DynamicTags;
 
 use ElementorPro\Modules\DynamicTags\Module;
 
-class isSingular extends \Elementor\Core\DynamicTags\Tag {
+class IsSingular extends \Elementor\Core\DynamicTags\Tag {
     public function get_name() {
         return 'rto-collection-is-singular';
     }

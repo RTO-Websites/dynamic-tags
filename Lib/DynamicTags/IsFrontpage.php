@@ -4,7 +4,7 @@ namespace DynamicTags\Lib\DynamicTags;
 
 use ElementorPro\Modules\DynamicTags\Module;
 
-Class isFrontpage extends \Elementor\Core\DynamicTags\Tag {
+Class IsFrontpage extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
         return 'rto-collection-is-frontpage';

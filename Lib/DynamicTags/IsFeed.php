@@ -3,17 +3,15 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
-
 use ElementorPro\Modules\DynamicTags\Module;
 
-class isPostsPage extends \Elementor\Core\DynamicTags\Tag {
-
+class IsFeed extends \Elementor\Core\DynamicTags\Tag {
     public function get_name() {
-        return 'rto-collection-is-posts-page';
+        return 'rto-collection-is-feed';
     }
 
     public function get_title() {
-        return __( 'Is home', 'dynamic-tags' );
+        return __( 'Is feed', 'dynamic-tags' );
     }
 
 
@@ -30,11 +28,11 @@ class isPostsPage extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        if ( is_home() ) {
+
+        if ( is_feed() ) {
             echo "true";
         } else {
             echo "false";
         }
     }
-
 }

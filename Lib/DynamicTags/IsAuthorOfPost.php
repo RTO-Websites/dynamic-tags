@@ -1,17 +1,17 @@
 <?php
 
-
 namespace DynamicTags\Lib\DynamicTags;
 
 use ElementorPro\Modules\DynamicTags\Module;
 
-class isFeed extends \Elementor\Core\DynamicTags\Tag {
+Class IsAuthorOfPost extends \Elementor\Core\DynamicTags\Tag {
+
     public function get_name() {
-        return 'rto-collection-is-feed';
+        return 'rto-collection-is-author-of-post';
     }
 
     public function get_title() {
-        return __( 'Is feed', 'dynamic-tags' );
+        return __( 'Is author of post current user', 'dynamic-tags' );
     }
 
 
@@ -28,11 +28,13 @@ class isFeed extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-
-        if ( is_feed() ) {
-            echo "true";
+        $userId = get_current_user_id();
+        $authorId = get_the_author_meta( 'ID' );
+        if ( $userId === $authorId ) {
+            echo 'true';
         } else {
-            echo "false";
+            echo 'false';
         }
     }
+
 }

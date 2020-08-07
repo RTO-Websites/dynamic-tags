@@ -1,17 +1,19 @@
 <?php
 
+
 namespace DynamicTags\Lib\DynamicTags;
+
 
 use ElementorPro\Modules\DynamicTags\Module;
 
-Class isAuthorOfPost extends \Elementor\Core\DynamicTags\Tag {
+class IsPostsPage extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
-        return 'rto-collection-is-author-of-post';
+        return 'rto-collection-is-posts-page';
     }
 
     public function get_title() {
-        return __( 'Is author of post current user', 'dynamic-tags' );
+        return __( 'Is home', 'dynamic-tags' );
     }
 
 
@@ -28,12 +30,10 @@ Class isAuthorOfPost extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        $userId = get_current_user_id();
-        $authorId = get_the_author_meta( 'ID' );
-        if ( $userId === $authorId ) {
-            echo 'true';
+        if ( is_home() ) {
+            echo "true";
         } else {
-            echo 'false';
+            echo "false";
         }
     }
 

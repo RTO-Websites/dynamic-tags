@@ -6,7 +6,7 @@ namespace DynamicTags\Lib\DynamicTags;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
-class isPostInCategory extends \Elementor\Core\DynamicTags\Tag {
+class IsPostInCategory extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
         return 'rto-collection-is-post-in-category';
