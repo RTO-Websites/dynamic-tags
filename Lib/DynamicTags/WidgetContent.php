@@ -50,7 +50,12 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Tag {
 
     public function render() {
         if ( filter_input( INPUT_POST, 'action' ) === 'elementor_ajax' ) {
-            return;
+            $actions = filter_input( INPUT_POST, 'actions' );
+            $actions = json_decode( $actions);
+
+            if ( !empty( $actions->save_builder ) ) {
+                return;
+            }
         }
         $settings = $this->get_settings();
 
