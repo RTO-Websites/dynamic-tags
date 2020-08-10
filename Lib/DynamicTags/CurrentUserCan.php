@@ -30,20 +30,39 @@ class CurrentUserCan extends \Elementor\Core\DynamicTags\Tag {
             'capability',
             [
                 'label' => __( 'Capability' ),
-                'type' => Controls_Manager::TEXT,
+                'type' => Controls_Manager::SELECT2,
                 'label_block' => true,
                 'default' => '',
+                'options' => $this->getAllCapatibilities(),
             ]
         );
     }
 
     public function render() {
         $settings = $this->get_settings();
+
         if ( empty( $settings['capability'] ) ) {
-            echo 'false';
+            echo false;
         }
 
         echo current_user_can( $settings['capability'] );
+    }
+
+    public function getAllCapatibilities() {
+        global $wp_roles;
+        $roles = $wp_roles->roles;
+        $list = [];
+
+        foreach ( $roles as $group ) {
+            foreach ( $group['capabilities'] as $capability => $null ) {
+                if ( in_array( $capability, $list ) ) {
+                    continue;
+                }
+                $list[$capability] = $capability;
+            }
+        }
+
+        return $list;
     }
 
 }
