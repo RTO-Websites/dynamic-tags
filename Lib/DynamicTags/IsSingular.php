@@ -7,7 +7,7 @@ use ElementorPro\Modules\DynamicTags\Module;
 
 class IsSingular extends \Elementor\Core\DynamicTags\Tag {
     public function get_name() {
-        return 'rto-collection-is-singular';
+        return 'dynamic-tags-is-singular';
     }
 
     public function get_title() {

@@ -7,7 +7,7 @@ use ElementorPro\Modules\DynamicTags\Module;
 
 class IsFeed extends \Elementor\Core\DynamicTags\Tag {
     public function get_name() {
-        return 'rto-collection-is-feed';
+        return 'dynamic-tags-is-feed';
     }
 
     public function get_title() {

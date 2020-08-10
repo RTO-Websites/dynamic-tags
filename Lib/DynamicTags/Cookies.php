@@ -8,11 +8,11 @@ use ElementorPro\Modules\DynamicTags\Module;
 Class Cookies extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
-        return 'rto-collection-cookies';
+        return 'dynamic-tags-cookies';
     }
 
     public function get_title() {
-        return __( 'Cookies', 'rto-collection' );
+        return __( 'Cookies', 'dynamic-tags' );
     }
 
 

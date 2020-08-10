@@ -11,7 +11,7 @@ if ( !defined( 'ABSPATH' ) ) {
 
 class PostContent extends Tag {
     public function get_name() {
-        return 'rto-collection-post-content';
+        return 'dynamic-tags-post-content';
     }
 
     public function get_title() {

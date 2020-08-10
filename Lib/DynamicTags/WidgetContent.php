@@ -11,7 +11,7 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
 
-        return 'rto-collection-widget-content';
+        return 'dynamic-tags-widget-content';
     }
 
     public function get_title() {
@@ -85,7 +85,7 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Tag {
             return;
         }
 
-        $flatData[$widgetId]['id'] = $widgetId; // . '-copy';
+        $flatData[$widgetId]['id'] = $widgetId;
         /**
          * @var $tempWidget Widget_Base
          */

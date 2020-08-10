@@ -8,7 +8,7 @@ Class UserRole extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
 
-        return 'rto-collection-user-role';
+        return 'dynamic-tags-user-role';
     }
 
     public function get_title() {

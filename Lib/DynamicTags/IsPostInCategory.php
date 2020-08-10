@@ -9,7 +9,7 @@ use ElementorPro\Modules\DynamicTags\Module;
 class IsPostInCategory extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
-        return 'rto-collection-is-post-in-category';
+        return 'dynamic-tags-is-post-in-category';
     }
 
     public function get_title() {

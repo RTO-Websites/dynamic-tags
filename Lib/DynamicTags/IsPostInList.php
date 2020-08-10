@@ -5,14 +5,14 @@ namespace DynamicTags\Lib\DynamicTags;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
-class IsPostAmong extends \Elementor\Core\DynamicTags\Tag {
+class IsPostInList extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
-        return 'rto-collection-is-post-among';
+        return 'dynamic-tags-is-post-in-list';
     }
 
     public function get_title() {
-        return __( 'Is post among', 'dynamic-tags' );
+        return __( 'Is post in list', 'dynamic-tags' );
     }
 
     public function get_group() {

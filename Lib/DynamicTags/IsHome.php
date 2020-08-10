@@ -1,17 +1,19 @@
 <?php
 
+
 namespace DynamicTags\Lib\DynamicTags;
+
 
 use ElementorPro\Modules\DynamicTags\Module;
 
-Class WpmlLanguage extends \Elementor\Core\DynamicTags\Tag {
+class IsHome extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
-        return 'rto-collection-wpml-language';
+        return 'dynamic-tags-is-home';
     }
 
     public function get_title() {
-        return __( 'Language (WPML)', 'dynamic-tags' );
+        return __( 'Is home', 'dynamic-tags' );
     }
 
 
@@ -28,11 +30,7 @@ Class WpmlLanguage extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        if (!defined('ICL_LANGUAGE_CODE')) {
-            echo get_locale();
-        }
-
-        echo ICL_LANGUAGE_CODE;
+        echo is_home();
     }
 
 }

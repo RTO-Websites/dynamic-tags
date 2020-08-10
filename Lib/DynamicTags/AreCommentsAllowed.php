@@ -8,7 +8,7 @@ use ElementorPro\Modules\DynamicTags\Module;
 Class AreCommentsAllowed extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
-        return 'rto-collection-are-comments-allowed';
+        return 'dynamic-tags-are-comments-allowed';
     }
 
     public function get_title() {
@@ -29,11 +29,7 @@ Class AreCommentsAllowed extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        if ( comments_open() ) {
-            echo "true";
-        } else {
-            echo "false";
-        }
+        echo comments_open();
     }
 
 

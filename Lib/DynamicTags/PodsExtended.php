@@ -1,14 +1,13 @@
 <?php
 /**
- * This will add bool for pods
+ * This will add boolean for pods
  */
 
 namespace DynamicTags\Lib\DynamicTags;
 
-
-use ElementorPro\Modules\DynamicTags\Module;
 use ElementorPro\Modules\DynamicTags\Pods\Tags\Pods_Text;
 use ElementorPro\Modules\DynamicTags\Pods\pods_api;
+
 if (function_exists('pods_api')) {
     class PodsExtended extends Pods_Text {
 

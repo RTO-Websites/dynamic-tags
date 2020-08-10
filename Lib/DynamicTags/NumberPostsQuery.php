@@ -6,11 +6,8 @@ use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
 class NumberPostsQuery extends \Elementor\Core\DynamicTags\Tag {
-    const WRAPPED_TAG = false;
-    public static $dtCount = 0;
-
     public function get_name() {
-        return 'rto-collection-numberposts-query';
+        return 'dynamic-tags-numberposts-query';
     }
 
     public function get_title() {

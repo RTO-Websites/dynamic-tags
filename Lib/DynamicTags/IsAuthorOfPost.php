@@ -7,7 +7,7 @@ use ElementorPro\Modules\DynamicTags\Module;
 Class IsAuthorOfPost extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
-        return 'rto-collection-is-author-of-post';
+        return 'dynamic-tags-is-author-of-post';
     }
 
     public function get_title() {

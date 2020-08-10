@@ -2,7 +2,6 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
-use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
 class CurrentUrl extends \Elementor\Core\DynamicTags\Tag {

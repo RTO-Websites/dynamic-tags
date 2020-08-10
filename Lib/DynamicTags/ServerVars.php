@@ -12,7 +12,7 @@ if ( !defined( 'ABSPATH' ) ) {
 
 class ServerVars extends Tag {
     public function get_name() {
-        return 'rto-collection-server-vars';
+        return 'dynamic-tags-server-vars';
     }
 
     public function get_title() {
@@ -40,7 +40,7 @@ class ServerVars extends Tag {
         $this->add_control(
             'variable',
             [
-                'label' => __( 'Variable', 'rto-collection' ),
+                'label' => __( 'Variable', 'dynamic-tags' ),
                 'type' => Controls_Manager::SELECT,
                 'label_block' => true,
                 'default' => [],
