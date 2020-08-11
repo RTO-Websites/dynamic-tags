@@ -143,15 +143,9 @@ class DynamicTags {
 
             include_once( $dir . '/' . $tag );
 
-            $exists = false;
             if ( class_exists( $fullClassName ) ) {
                 $className = $fullClassName;
-                $exists = true;
-            } else if ( class_exists( $className ) ) {
-                $exists = true;
-            }
-
-            if ( !$exists ) {
+            } else if ( !class_exists( $className ) ) {
                 continue;
             }
 
