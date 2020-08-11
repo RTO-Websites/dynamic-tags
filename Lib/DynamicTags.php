@@ -79,8 +79,6 @@ class DynamicTags {
 
         $this->loadDependencies();
         #$this->setLocale();
-        #$this->defineAdminHooks();
-        #$this->definePublicHooks();
         $this->defineElementorHooks();
 
     }
@@ -122,38 +120,6 @@ class DynamicTags {
         $pluginI18n->setDomain( $this->getDynamicTags() );
 
         $this->loader->addAction( 'plugins_loaded', $pluginI18n, 'loadPluginTextdomain' );
-
-    }
-
-    /**
-     * Register all of the hooks related to the admin area functionality
-     * of the plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function defineAdminHooks() {
-
-        $pluginAdmin = new DynamicTagsAdmin( $this->getDynamicTags(), $this->getVersion() );
-
-        $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
-        $this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueScripts' );
-
-    }
-
-    /**
-     * Register all of the hooks related to the public-facing functionality
-     * of the plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function definePublicHooks() {
-
-        $pluginPublic = new DynamicTagsPublic( $this->getDynamicTags(), $this->getVersion() );
-
-        $this->loader->addAction( 'wp_enqueue_scripts', $pluginPublic, 'enqueueStyles' );
-        $this->loader->addAction( 'wp_enqueue_scripts', $pluginPublic, 'enqueueScripts' );
 
     }
 
