@@ -2,6 +2,7 @@
 
 use DynamicTags\Admin\DynamicTagsAdmin;
 use DynamicTags\Pub\DynamicTagsPublic;
+use Elementor\Core\DynamicTags\Manager;
 
 /**
  * The file that defines the core plugin class
@@ -30,157 +31,158 @@ use DynamicTags\Pub\DynamicTagsPublic;
  */
 class DynamicTags {
 
-	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power
-	 * the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
-	 */
-	protected $loader;
+    /**
+     * The loader that's responsible for maintaining and registering all hooks that power
+     * the plugin.
+     *
+     * @since    1.0.0
+     * @access   protected
+     * @var      Loader $loader Maintains and registers all hooks for the plugin.
+     */
+    protected $loader;
 
-	/**
-	 * The unique identifier of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $pluginName    The string used to uniquely identify this plugin.
-	 */
-	protected $pluginName;
+    /**
+     * The unique identifier of this plugin.
+     *
+     * @since    1.0.0
+     * @access   protected
+     * @var      string $pluginName The string used to uniquely identify this plugin.
+     */
+    protected $pluginName;
 
-	/**
-	 * The current version of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      string    $version    The current version of the plugin.
-	 */
-	protected $version;
+    /**
+     * The current version of the plugin.
+     *
+     * @since    1.0.0
+     * @access   protected
+     * @var      string $version The current version of the plugin.
+     */
+    protected $version;
 
-	/**
-	 * Define the core functionality of the plugin.
-	 *
-	 * Set the plugin name and the plugin version that can be used throughout the plugin.
-	 * Load the dependencies, define the locale, and set the hooks for the admin area and
-	 * the public-facing side of the site.
-	 *
-	 * @since    1.0.0
-	 */
-	public function __construct() {
 
-		$this->pluginName = 'dynamic-tags';
-		$this->version = DynamicTags_VERSION;
+    const INCLUDE_DIR = DynamicTags_DIR . '/Lib';
+    const TAG_NAMESPACE = 'DynamicTags\\Lib\\';
 
-		$this->loadDependencies();
-		$this->setLocale();
-		$this->defineAdminHooks();
-		$this->definePublicHooks();
+    /**
+     * Define the core functionality of the plugin.
+     *
+     * Set the plugin name and the plugin version that can be used throughout the plugin.
+     * Load the dependencies, define the locale, and set the hooks for the admin area and
+     * the public-facing side of the site.
+     *
+     * @since    1.0.0
+     */
+    public function __construct() {
 
-	}
+        $this->pluginName = 'dynamic-tags';
+        $this->version = DynamicTags_VERSION;
 
-	/**
-	 * Load the required dependencies for this plugin.
-	 *
-	 * Include the following files that make up the plugin:
-	 *
-	 * - DynamicTagsLoader. Orchestrates the hooks of the plugin.
-	 * - DynamicTagsI18n. Defines internationalization functionality.
-	 * - DynamicTagsAdmin. Defines all hooks for the admin area.
-	 * - DynamicTagsPublic. Defines all hooks for the public side of the site.
-	 *
-	 * Create an instance of the loader which will be used to register the hooks
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function loadDependencies() {
+        $this->loadDependencies();
+        $this->setLocale();
+        $this->defineElementorHooks();
 
-		$this->loader = new Loader();
+    }
 
-	}
+    /**
+     * Load the required dependencies for this plugin.
+     *
+     * Include the following files that make up the plugin:
+     *
+     * - DynamicTagsLoader. Orchestrates the hooks of the plugin.
+     * - DynamicTagsI18n. Defines internationalization functionality.
+     * - DynamicTagsAdmin. Defines all hooks for the admin area.
+     * - DynamicTagsPublic. Defines all hooks for the public side of the site.
+     *
+     * Create an instance of the loader which will be used to register the hooks
+     * with WordPress.
+     *
+     * @since    1.0.0
+     * @access   private
+     */
+    private function loadDependencies() {
 
-	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the DynamicTagsI18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function setLocale() {
+        $this->loader = new Loader();
 
-		$pluginI18n = new I18n();
-		$pluginI18n->setDomain( $this->getDynamicTags() );
+    }
 
-		$this->loader->addAction( 'plugins_loaded', $pluginI18n, 'loadPluginTextdomain' );
+    /**
+     * Define the locale for this plugin for internationalization.
+     *
+     * Uses the DynamicTagsI18n class in order to set the domain and to register the hook
+     * with WordPress.
+     *
+     * @since    1.0.0
+     * @access   private
+     */
+    private function setLocale() {
 
-	}
+        $pluginI18n = new I18n();
+        $pluginI18n->setDomain( $this->getDynamicTags() );
 
-	/**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function defineAdminHooks() {
+        $this->loader->addAction( 'plugins_loaded', $pluginI18n, 'loadPluginTextdomain' );
 
-		$pluginAdmin = new DynamicTagsAdmin( $this->getDynamicTags(), $this->getVersion() );
+    }
 
-		$this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueStyles' );
-		$this->loader->addAction( 'admin_enqueue_scripts', $pluginAdmin, 'enqueueScripts' );
+    public function defineElementorHooks() {
+        $this->getLoader()->addAction( 'elementor/dynamic_tags/register_tags', $this, 'registerDynamicTags', 10, 1 );
+    }
 
-	}
+    /**
+     * Register dynamic tags
+     *
+     * @param Manager $dynamicTags
+     */
+    public function registerDynamicTags( $dynamicTags ) {
+        $dir = self::INCLUDE_DIR . '/DynamicTags';
+        foreach ( scandir( $dir ) as $tag ) {
+            $className = explode( '.php', $tag )[0];
+            $fullClassName = self::TAG_NAMESPACE . 'DynamicTags\\' . $className;
+            if ( !file_exists( $dir . '/' . $tag ) || is_dir( $dir . '/' . $tag ) ) {
+                continue;
+            }
 
-	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function definePublicHooks() {
+            include_once( $dir . '/' . $tag );
 
-		$pluginPublic = new DynamicTagsPublic( $this->getDynamicTags(), $this->getVersion() );
+            if ( class_exists( $fullClassName ) ) {
+                $className = $fullClassName;
+            } else if ( !class_exists( $className ) ) {
+                continue;
+            }
 
-		$this->loader->addAction( 'wp_enqueue_scripts', $pluginPublic, 'enqueueStyles' );
-		$this->loader->addAction( 'wp_enqueue_scripts', $pluginPublic, 'enqueueScripts' );
+            $dynamicTags->register_tag( $className );
+        }
+    }
 
-	}
+    /**
+     * The name of the plugin used to uniquely identify it within the context of
+     * WordPress and to define internationalization functionality.
+     *
+     * @return    string    The name of the plugin.
+     * @since     1.0.0
+     */
+    public function getDynamicTags() {
+        return $this->pluginName;
+    }
 
-	/**
-	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The name of the plugin.
-	 */
-	public function getDynamicTags() {
-		return $this->pluginName;
-	}
+    /**
+     * The reference to the class that orchestrates the hooks with the plugin.
+     *
+     * @return    Loader    Orchestrates the hooks of the plugin.
+     * @since     1.0.0
+     */
+    public function getLoader() {
+        return $this->loader;
+    }
 
-	/**
-	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @return    Loader    Orchestrates the hooks of the plugin.
-	 *@since     1.0.0
-	 */
-	public function getLoader() {
-		return $this->loader;
-	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
-	 */
-	public function getVersion() {
-		return $this->version;
-	}
+    /**
+     * Retrieve the version number of the plugin.
+     *
+     * @return    string    The version number of the plugin.
+     * @since     1.0.0
+     */
+    public function getVersion() {
+        return $this->version;
+    }
 
     /**
      * Run the loader to execute all of the hooks with WordPress.
