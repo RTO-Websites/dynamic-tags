@@ -21,7 +21,7 @@ use DynamicTags\Lib\Deactivator;
  * @wordpress-plugin
  * Plugin Name:       DynamicTags for Elementor
  * Plugin URI:        https://www.rto.de
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Dynamic Tags is an Elementor addon that adds some useful dynamic tags.
  * Version:           1.0.0
  * Author:            RTO GmbH
  * Author URI:        https://www.rto.de
