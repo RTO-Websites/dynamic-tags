@@ -78,7 +78,7 @@ class DynamicTags {
         $this->version = DynamicTags_VERSION;
 
         $this->loadDependencies();
-        #$this->setLocale();
+        $this->setLocale();
         $this->defineElementorHooks();
 
     }

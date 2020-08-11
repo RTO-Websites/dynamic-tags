@@ -11,7 +11,7 @@ Class IsAuthorOfPost extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function get_title() {
-        return __( 'Is author of post current user', 'dynamic-tags' );
+        return __( 'Is current user author of post', 'dynamic-tags' );
     }
 
 
