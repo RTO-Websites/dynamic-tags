@@ -30,6 +30,7 @@ class ServerVars extends Tag {
     protected function _register_controls() {
         $options = [];
         foreach ( array_keys( $_SERVER ) as $key ) {
+            $key = esc_attr( $key );
             $options[$key] = $key;
         }
 
@@ -60,6 +61,6 @@ class ServerVars extends Tag {
         if ( empty( $key ) ) {
             return;
         }
-        echo $_SERVER[$key] ?? '';
+        echo wp_kses_post( $_SERVER[$key] ?? '' );
     }
 }

@@ -5,7 +5,7 @@ namespace DynamicTags\Lib\DynamicTags;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
-Class Cookies extends \Elementor\Core\DynamicTags\Tag {
+class Cookies extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
         return 'dynamic-tags-cookies';
@@ -40,12 +40,9 @@ Class Cookies extends \Elementor\Core\DynamicTags\Tag {
 
     public function render() {
         $settings = $this->get_settings();
-        $keys = $this->getCookieNames();
-        foreach ( $_COOKIE as $key => $val ) {
-            if ( $key === $keys[$settings['CookieName']] ) {
-                echo $val;
-            }
-        }
+        $key = $settings['CookieName'];
+        $value = filter_input( INPUT_COOKIE, $key );
+        echo wp_kses_post( $value );
     }
 
     public function get_panel_template_setting_key() {
@@ -53,10 +50,11 @@ Class Cookies extends \Elementor\Core\DynamicTags\Tag {
     }
 
     private function getCookieNames() {
-        $keys = [];
+        $names = [];
         foreach ( $_COOKIE as $key => $val ) {
-            array_push( $keys, $key );
+            $key = esc_attr( $key );
+            $names[$key] = $key;
         }
-        return $keys;
+        return $names;
     }
 }
