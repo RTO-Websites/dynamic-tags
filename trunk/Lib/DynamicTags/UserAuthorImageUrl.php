@@ -65,16 +65,10 @@ class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Tag {
             return;
         }
 
-        $ch = curl_init( $imageData['url'] );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
-        curl_setopt( $ch, CURLOPT_HEADER, true );  // we want headers
-        curl_setopt( $ch, CURLOPT_NOBODY, true );  // we don't need body
-        curl_exec( $ch );
-        $httpcode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+        $response = wp_remote_head( $imageData['url'] );
 
-        if ( $httpcode == 404 ) {
-            echo $httpcode;
+        if ( is_wp_error( $response ) || $response['response']['code'] === 404 ) {
+            echo '';
             return;
         }
 
