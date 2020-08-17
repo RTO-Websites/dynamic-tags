@@ -76,7 +76,15 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
             ]
         );
         $this->add_control(
-            'urlsToLinks',
+            'booleanToYesNo',
+            [
+                'label' => __( 'Parse boolean to yes/no', 'dynamic-tags' ),
+                'type' => Controls_Manager::SWITCHER,
+                'default' => 'yes',
+            ]
+        );
+        $this->add_control(
+            'addWrapper',
             [
                 'label' => __( 'Add wrapper around items', 'dynamic-tags' ),
                 'type' => Controls_Manager::SWITCHER,
@@ -211,7 +219,6 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
             $values = [];
 
             while ( have_rows( $parentField['key'] ) ) {
-                echo 'rowp';
                 $row = the_row();
                 //var_dump( $row );
                 foreach ( $row as $columnKey => $value ) {
@@ -245,6 +252,14 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 if ( !empty( $this->get_settings( 'urlsToLinks' ) ) ) {
                     foreach ( $values as &$value ) {
                         $value = '<a href="' . $value . '">' . $value . '</a>';
+                    }
+                }
+                break;
+
+            case 'true_false':
+                if ( !empty( $this->get_settings( 'booleanToYesNo' ) ) ) {
+                    foreach ( $values as &$value ) {
+                        $value = $value ? __( 'Yes' ) : __( 'No' );
                     }
                 }
                 break;
