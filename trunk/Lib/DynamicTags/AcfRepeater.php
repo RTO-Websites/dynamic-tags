@@ -57,6 +57,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 'label' => __( 'Row offset', 'elementor-pro' ),
                 'type' => Controls_Manager::NUMBER,
                 'default' => '0',
+                'min' => '0',
             ]
         );
         $this->add_control(
@@ -170,7 +171,6 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                     }
 
                     $key = $subfield['key'] . ':' . $subfield['name'] . ':' . $field['key'] . ':' . $field['name'];
-                    //$key = $subfield['key'] . ':' . $field['key'] . ':' . $subfield['name'];
                     $options[$key] = $field['label'] . ' - ' . $subfield['label'];
                 }
             }
@@ -214,18 +214,30 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 $field = get_field_object( $field_key, get_queried_object() );
             }
 
-            $max = 10;
+            $max = $tag->get_settings( 'maxRows' );
+            $max = !empty( $max ) ? $max : '999';
+            $offset = $tag->get_settings( 'rowOffset' );
+
             $i = 0;
             $values = [];
 
             while ( have_rows( $parentField['key'] ) ) {
                 $row = the_row();
-                //var_dump( $row );
+                if ( $i < $offset ) {
+                    $i += 1;
+                    continue;
+                }
                 foreach ( $row as $columnKey => $value ) {
                     if ( $columnKey !== $field['key'] ) {
                         continue;
                     }
                     $values[] = $value;
+                }
+
+                $i += 1;
+
+                if ( $i >= ($max + $offset) ) {
+                    break;
                 }
             }
 
