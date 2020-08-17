@@ -262,6 +262,15 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                         $value = $value ? __( 'Yes' ) : __( 'No' );
                     }
                 }
+
+                break;
+
+            case 'date_picker':
+            case 'time_picker':
+            case 'date_time_picker':
+                foreach ( $values as &$value ) {
+                    $value = date( $field['display_format'], strtotime( $value ) );
+                }
                 break;
 
         }
@@ -272,7 +281,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
             }
         }
 
-        echo implode( $separator, $values );
+        echo wp_kses_post( implode( $separator, $values ) );
         var_dump( $field['type'] );
     }
 }
