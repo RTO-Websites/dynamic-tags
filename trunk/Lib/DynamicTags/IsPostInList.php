@@ -45,11 +45,11 @@ class IsPostInList extends \Elementor\Core\DynamicTags\Tag {
 
     public function render() {
         $settings = $this->get_settings();
-        $Ids = $this->getIds();
+        $ids = $this->getIds();
         $query = [];
 
         for ( $i = 0; $i < count( $settings['ids'] ); $i++ ) {
-            array_push( $query, $Ids[$settings['ids'][$i]] );
+            $query[] = $ids[$settings['ids'][$i]];
         }
 
         echo in_array( get_the_ID(), $query );

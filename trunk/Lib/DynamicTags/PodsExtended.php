@@ -23,7 +23,7 @@ if (function_exists('pods_api')) {
 
         protected function get_supported_fields() {
             $fields = parent::get_supported_fields();
-            array_push($fields, 'boolean');
+            $fields[] = 'boolean';
 
             return $fields;
         }
