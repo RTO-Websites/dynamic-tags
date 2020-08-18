@@ -2,12 +2,14 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use ElementorPro\Modules\DynamicTags\Tags\Base\Data_Tag;
 use Elementor\Controls_Manager;
 use Elementor\Core\DynamicTags\Base_Tag;
 use ElementorPro\Modules\DynamicTags\Module;
 use ElementorPro\Modules\DynamicTags\ACF\Module as ACFModule;
+use Elementor\Core\DynamicTags\Tag;
 
-class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
+class AcfRepeater extends Data_Tag {
 
     public function get_name() {
         return 'acf-repeater';
@@ -170,6 +172,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                     'ids' => 'IDs',
                     'urls' => 'Urls',
                     'img' => __( 'Rendered &lt;img&gt;' ),
+                    'array' => __( 'Array (for use in gallery-widget)' ),
                 ],
                 'default' => 'img',
             ]
@@ -291,6 +294,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
         return [
             Module::TEXT_CATEGORY,
             Module::POST_META_CATEGORY,
+            Module::GALLERY_CATEGORY,
         ];
     }
 
@@ -315,7 +319,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
 
             $i = 0;
             $values = [];
-
+            reset_rows();
             while ( have_rows( $parentField['key'] ) ) {
                 $row = the_row();
                 if ( $i < $offset ) {
@@ -342,7 +346,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
         return [];
     }
 
-    public function render() {
+    public function get_value( array $options = [] ) {
         $separator = $this->get_settings( 'separator' ) ?? '';
         list( $field, $values ) = $this->getTagValueField( $this );
 
@@ -390,10 +394,15 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 $imageSize = $this->get_settings( 'imageSize' );
                 $imageWrapper = $this->get_settings( 'addImageWrapper' );
                 $linkImages = $this->get_settings( 'linkImages' );
+                $imageArray = [];
+                $galleryOutput = $this->get_settings( 'galleryOutput' );
                 $count = 0;
 
                 foreach ( $values as &$value ) {
-                    switch ( $this->get_settings( 'galleryOutput' ) ) {
+                    if ( empty( $value ) ) {
+                        continue;
+                    }
+                    switch ( $galleryOutput ) {
                         case 'urls':
                             foreach ( $value as &$image ) {
                                 $image = wp_get_attachment_url( $image );
@@ -417,10 +426,20 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                                 }
                             }
                             break;
+
+                        case 'array':
+                            foreach ( $value as &$image ) {
+                                $imageArray[] = [ 'id' => (int)$image ];
+                            }
+                            break;
                     }
                     $count += 1;
-                    $value = implode( $imageSeparator, $value );
 
+                    $value = implode( $imageSeparator, $value );
+                }
+
+                if ( $galleryOutput === 'array' ) {
+                    return $imageArray;
                 }
 
                 break;
@@ -441,17 +460,16 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
             }
         }
 
-        echo wp_kses_post( implode( $separator, $values ) );
-        var_dump( $field['type'] );
+        return wp_kses_post( implode( $separator, $values ) );
+        #var_dump( $field['type'] );
     }
 
     private function getImageSizes() {
-        $result = [];
+        $result = [ 'full' => 'Fullsize' ];
         if ( function_exists( 'wp_get_registered_image_subsizes' ) ) {
             // wp >= 5.3
             $imageSizes = array_keys( wp_get_registered_image_subsizes() );
         } else {
-            $result = [ 'full' => 'Fullsize' ];
             // wp < 5.3
             global $_wp_additional_image_sizes;
             $defaultImageSizes = get_intermediate_image_sizes();
