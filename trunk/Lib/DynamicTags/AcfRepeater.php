@@ -343,9 +343,8 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        $separator = $this->get_settings( 'separator' );
+        $separator = $this->get_settings( 'separator' ) ?? '';
         list( $field, $values ) = $this->getTagValueField( $this );
-        var_dump( $separator );
 
         switch ( $field['type'] ) {
             case 'image':
@@ -387,7 +386,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                     break;
                 }
 
-                $imageSeparator = $this->get_settings( 'imageSeparator' );
+                $imageSeparator = $this->get_settings( 'imageSeparator' ) ?? '';
                 $imageSize = $this->get_settings( 'imageSize' );
                 $imageWrapper = $this->get_settings( 'addImageWrapper' );
                 $linkImages = $this->get_settings( 'linkImages' );
