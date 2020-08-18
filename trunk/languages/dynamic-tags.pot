@@ -1,0 +1,68 @@
+msgid "Are comments allowed"
+msgstr ""
+
+msgid "Cookies"
+msgstr ""
+
+msgid "Cookie Name"
+msgstr ""
+
+msgid "Current-Language (WPML or Polylang)"
+msgstr ""
+
+msgid "Current-URL"
+msgstr ""
+
+msgid "Current user can"
+msgstr ""
+
+msgid "Is current user author of post"
+msgstr ""
+
+msgid "Is feed"
+msgstr ""
+
+msgid "Is front page"
+msgstr ""
+
+msgid "Is home"
+msgstr ""
+
+msgid "Is post in category"
+msgstr ""
+
+msgid "Is post in list"
+msgstr ""
+
+msgid "IDs"
+msgstr ""
+
+msgid "Is singular"
+msgstr ""
+
+msgid "Number posts query"
+msgstr ""
+
+msgid "Custom-Query"
+msgstr ""
+
+msgid "One per line, example:"
+msgstr ""
+
+msgid "Server Variables"
+msgstr ""
+
+msgid "Variable"
+msgstr ""
+
+msgid "User/Author Image Url"
+msgstr ""
+
+msgid "Author or User"
+msgstr ""
+
+msgid "User role"
+msgstr ""
+
+msgid "Widget Content"
+msgstr ""
