@@ -90,6 +90,15 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
         );
 
         $this->add_control(
+            'linkImages',
+            [
+                'label' => __( 'Link images', 'dynamic-tags' ),
+                'type' => Controls_Manager::SWITCHER,
+                'default' => 'yes',
+            ]
+        );
+
+        $this->add_control(
             'addWrapper',
             [
                 'label' => __( 'Add wrapper around items', 'dynamic-tags' ),
@@ -171,6 +180,17 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 'label' => __( 'Image-Separator', 'elementor-pro' ),
                 'type' => Controls_Manager::TEXT,
                 'default' => ', ',
+            ]
+        );
+        $this->add_control(
+            'addImageWrapper',
+            [
+                'label' => __( 'Add wrapper around each image', 'dynamic-tags' ),
+                'type' => Controls_Manager::SWITCHER,
+                'default' => 'no',
+                'condition' => [
+                    'galleryOutput' => 'img',
+                ],
             ]
         );
     }
@@ -325,14 +345,23 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
     public function render() {
         $separator = $this->get_settings( 'separator' );
         list( $field, $values ) = $this->getTagValueField( $this );
+        var_dump( $separator );
 
         switch ( $field['type'] ) {
             case 'image':
                 $imageSize = $this->get_settings( 'imageSize' );
+                $linkImages = $this->get_settings( 'linkImages' );
+                $slideshowId = 'slideshow-' . $this->get_id();
+                $slideshow = ' data-elementor-lightbox-slideshow="' . $slideshowId . '" ';
                 foreach ( $values as &$value ) {
+                    $imageId = $value;
                     $value = !empty( $this->get_settings( 'imagesToImg' ) )
                         ? wp_get_attachment_image( $value, $imageSize )
                         : wp_get_attachment_url( $value );
+
+                    if ( !empty( $linkImages ) ) {
+                        $value = '<a ' . $slideshow . 'class="acf-repeater-image-link" href="' . wp_get_attachment_url( $imageId ) . '">' . $value . '</a>';
+                    }
                 }
                 break;
 
@@ -360,6 +389,10 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
 
                 $imageSeparator = $this->get_settings( 'imageSeparator' );
                 $imageSize = $this->get_settings( 'imageSize' );
+                $imageWrapper = $this->get_settings( 'addImageWrapper' );
+                $linkImages = $this->get_settings( 'linkImages' );
+                $count = 0;
+
                 foreach ( $values as &$value ) {
                     switch ( $this->get_settings( 'galleryOutput' ) ) {
                         case 'urls':
@@ -369,11 +402,24 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                             break;
 
                         case 'img':
+                            $slideshowId = 'slideshow-' . $this->get_id() . '-' . $count;
+                            $slideshow = ' data-elementor-lightbox-slideshow="' . $slideshowId . '" ';
+
                             foreach ( $value as &$image ) {
-                                $image = wp_get_attachment_image( $image, $imageSize );
+                                $imageId = $image;
+                                $image = wp_get_attachment_image( $imageId, $imageSize );
+
+                                if ( !empty( $imageWrapper ) ) {
+                                    $image = '<span class="acf-repeater-image-item">' . $image . '</span>';
+                                }
+
+                                if ( !empty( $linkImages ) ) {
+                                    $image = '<a ' . $slideshow . 'class="acf-repeater-image-link" href="' . wp_get_attachment_url( $imageId ) . '">' . $image . '</a>';
+                                }
                             }
                             break;
                     }
+                    $count += 1;
                     $value = implode( $imageSeparator, $value );
 
                 }
@@ -402,9 +448,9 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
 
     private function getImageSizes() {
         $result = [];
-        if (function_exists('wp_get_registered_image_subsizes') ) {
+        if ( function_exists( 'wp_get_registered_image_subsizes' ) ) {
             // wp >= 5.3
-            $imageSizes = array_keys(wp_get_registered_image_subsizes());
+            $imageSizes = array_keys( wp_get_registered_image_subsizes() );
         } else {
             $result = [ 'full' => 'Fullsize' ];
             // wp < 5.3
@@ -412,6 +458,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
             $defaultImageSizes = get_intermediate_image_sizes();
             $imageSizes = array_merge( $defaultImageSizes, array_keys( $_wp_additional_image_sizes ) );
         }
+
         foreach ( $imageSizes as $size ) {
             $result[$size] = $size;
         }
