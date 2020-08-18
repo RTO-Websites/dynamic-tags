@@ -401,12 +401,17 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
     }
 
     private function getImageSizes() {
-        global $_wp_additional_image_sizes;
-
-        $result = [ 'full' => 'Fullsize' ];
-        $defaultImageSizes = get_intermediate_image_sizes();
-        $imageSizes = array_merge( $defaultImageSizes, array_keys( $_wp_additional_image_sizes ) );
-
+        $result = [];
+        if (function_exists('wp_get_registered_image_subsizes') ) {
+            // wp >= 5.3
+            $imageSizes = array_keys(wp_get_registered_image_subsizes());
+        } else {
+            $result = [ 'full' => 'Fullsize' ];
+            // wp < 5.3
+            global $_wp_additional_image_sizes;
+            $defaultImageSizes = get_intermediate_image_sizes();
+            $imageSizes = array_merge( $defaultImageSizes, array_keys( $_wp_additional_image_sizes ) );
+        }
         foreach ( $imageSizes as $size ) {
             $result[$size] = $size;
         }
