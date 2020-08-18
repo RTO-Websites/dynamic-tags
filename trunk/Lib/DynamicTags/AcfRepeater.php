@@ -41,6 +41,16 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
             ]
         );
 
+
+        $this->add_control(
+            'headingQuery',
+            [
+                'label' => __( 'Query-Settings', 'dynamic-tags' ),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
         $this->add_control(
             'maxRows',
             [
@@ -60,6 +70,44 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 'min' => '0',
             ]
         );
+
+
+        $this->add_control(
+            'headingOutputSettings',
+            [
+                'label' => __( 'Output-Settings', 'dynamic-tags' ),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_control(
+            'urlsToLinks',
+            [
+                'label' => __( 'Parse urls to', 'dynamic-tags' ) . ' &lt;a&gt;',
+                'type' => Controls_Manager::SWITCHER,
+                'default' => 'yes',
+            ]
+        );
+
+        $this->add_control(
+            'addWrapper',
+            [
+                'label' => __( 'Add wrapper around items', 'dynamic-tags' ),
+                'type' => Controls_Manager::SWITCHER,
+                'default' => 'no',
+            ]
+        );
+
+
+        $this->add_control(
+            'headingAcfImages',
+            [
+                'label' => __( 'ACF-Image', 'dynamic-tags' ),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
         $this->add_control(
             'imagesToImg',
             [
@@ -68,12 +116,14 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 'default' => 'yes',
             ]
         );
+
+
         $this->add_control(
-            'urlsToLinks',
+            'headingAcfYesNo',
             [
-                'label' => __( 'Parse urls to', 'dynamic-tags' ) . ' &lt;a&gt;',
-                'type' => Controls_Manager::SWITCHER,
-                'default' => 'yes',
+                'label' => __( 'ACF-Yes-No', 'dynamic-tags' ),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
             ]
         );
         $this->add_control(
@@ -84,12 +134,15 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 'default' => 'yes',
             ]
         );
+
+
+
         $this->add_control(
-            'addWrapper',
+            'headingAcfGallery',
             [
-                'label' => __( 'Add wrapper around items', 'dynamic-tags' ),
-                'type' => Controls_Manager::SWITCHER,
-                'default' => 'no',
+                'label' => __( 'ACF-Gallery', 'dynamic-tags' ),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
             ]
         );
         $this->add_control(
@@ -103,6 +156,14 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                     'img' => __( 'Rendered &lt;img&gt;' ),
                 ],
                 'default' => 'img',
+            ]
+        );
+        $this->add_control(
+            'imageSeparator',
+            [
+                'label' => __( 'Image-Separator', 'elementor-pro' ),
+                'type' => Controls_Manager::TEXT,
+                'default' => ', ',
             ]
         );
     }
@@ -289,26 +350,22 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                     break;
                 }
 
+                $imageSeparator = $this->get_settings('imageSeparator');
                 foreach ( $values as &$value ) {
                     switch ( $this->get_settings( 'galleryOutput' ) ) {
-                        case 'ids':
-                            $value = implode( ',', $value );
-                            break;
-
                         case 'urls':
                             foreach ( $value as &$image ) {
                                 $image = wp_get_attachment_url( $image );
                             }
-                            $value = implode( ',', $value );
                             break;
 
                         case 'img':
                             foreach ( $value as &$image ) {
                                 $image = wp_get_attachment_image( $image, 'full' );
                             }
-                            $value = implode( '', $value );
                             break;
                     }
+                    $value = implode( $imageSeparator, $value );
 
                 }
 
