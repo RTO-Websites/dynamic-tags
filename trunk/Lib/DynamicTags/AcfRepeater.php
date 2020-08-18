@@ -22,7 +22,6 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
     }
 
     protected function _register_controls() {
-
         $this->add_control(
             'key',
             [
@@ -116,6 +115,15 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 'default' => 'yes',
             ]
         );
+        $this->add_control(
+            'imageSize',
+            [
+                'label' => __( 'Image-Size', 'dynamic-tags' ),
+                'type' => Controls_Manager::SELECT,
+                'options' => $this->getImageSizes(),
+                'default' => 'full',
+            ]
+        );
 
 
         $this->add_control(
@@ -134,7 +142,6 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 'default' => 'yes',
             ]
         );
-
 
 
         $this->add_control(
@@ -321,9 +328,10 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
 
         switch ( $field['type'] ) {
             case 'image':
+                $imageSize = $this->get_settings( 'imageSize' );
                 foreach ( $values as &$value ) {
                     $value = !empty( $this->get_settings( 'imagesToImg' ) )
-                        ? wp_get_attachment_image( $value, 'full' )
+                        ? wp_get_attachment_image( $value, $imageSize )
                         : wp_get_attachment_url( $value );
                 }
                 break;
@@ -350,7 +358,8 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                     break;
                 }
 
-                $imageSeparator = $this->get_settings('imageSeparator');
+                $imageSeparator = $this->get_settings( 'imageSeparator' );
+                $imageSize = $this->get_settings( 'imageSize' );
                 foreach ( $values as &$value ) {
                     switch ( $this->get_settings( 'galleryOutput' ) ) {
                         case 'urls':
@@ -361,7 +370,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
 
                         case 'img':
                             foreach ( $value as &$image ) {
-                                $image = wp_get_attachment_image( $image, 'full' );
+                                $image = wp_get_attachment_image( $image, $imageSize );
                             }
                             break;
                     }
@@ -389,5 +398,19 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
 
         echo wp_kses_post( implode( $separator, $values ) );
         var_dump( $field['type'] );
+    }
+
+    private function getImageSizes() {
+        global $_wp_additional_image_sizes;
+
+        $result = [ 'full' => 'Fullsize' ];
+        $defaultImageSizes = get_intermediate_image_sizes();
+        $imageSizes = array_merge( $defaultImageSizes, array_keys( $_wp_additional_image_sizes ) );
+
+        foreach ( $imageSizes as $size ) {
+            $result[$size] = $size;
+        }
+
+        return $result;
     }
 }
