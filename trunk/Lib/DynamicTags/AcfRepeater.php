@@ -92,12 +92,19 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                 'default' => 'no',
             ]
         );
-
-        // separator
-        // rows
-        // parse image-urls to <img>
-        // parse urls to <a>
-
+        $this->add_control(
+            'galleryOutput',
+            [
+                'label' => __( 'Gallery output', 'dynamic-tags' ),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    'ids' => 'IDs',
+                    'urls' => 'Urls',
+                    'img' => __( 'Rendered &lt;img&gt;' ),
+                ],
+                'default' => 'img',
+            ]
+        );
     }
 
     /**
@@ -236,7 +243,7 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
 
                 $i += 1;
 
-                if ( $i >= ($max + $offset) ) {
+                if ( $i >= ( $max + $offset ) ) {
                     break;
                 }
             }
@@ -273,6 +280,36 @@ class AcfRepeater extends \Elementor\Core\DynamicTags\Tag {
                     foreach ( $values as &$value ) {
                         $value = $value ? __( 'Yes' ) : __( 'No' );
                     }
+                }
+
+                break;
+
+            case 'gallery':
+                if ( empty( $values ) ) {
+                    break;
+                }
+
+                foreach ( $values as &$value ) {
+                    switch ( $this->get_settings( 'galleryOutput' ) ) {
+                        case 'ids':
+                            $value = implode( ',', $value );
+                            break;
+
+                        case 'urls':
+                            foreach ( $value as &$image ) {
+                                $image = wp_get_attachment_url( $image );
+                            }
+                            $value = implode( ',', $value );
+                            break;
+
+                        case 'img':
+                            foreach ( $value as &$image ) {
+                                $image = wp_get_attachment_image( $image, 'full' );
+                            }
+                            $value = implode( '', $value );
+                            break;
+                    }
+
                 }
 
                 break;
