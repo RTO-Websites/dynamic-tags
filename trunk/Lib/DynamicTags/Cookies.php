@@ -52,6 +52,11 @@ class Cookies extends \Elementor\Core\DynamicTags\Tag {
     }
 
     private function getCookieNames() {
-        return array_map( 'esc_attr', array_keys( $_COOKIE ) );
+        $names = [];
+        foreach ( $_COOKIE as $key => $val ) {
+            $key = esc_attr( $key );
+            $names[$key] = $key;
+        }
+        return $names;
     }
 }
