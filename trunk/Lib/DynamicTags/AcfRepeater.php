@@ -36,9 +36,22 @@ class AcfRepeater extends Data_Tag {
         $subFields = [
             'text' => [
                 'text',
-                'date_time_picker',
+                'textarea',
+                'number',
+                'email',
+                'password',
+                'wysiwyg',
+                'select',
+                'checkbox',
+                'radio',
+
+                // Pro
+                'oembed',
+                'google_map',
                 'date_picker',
                 'time_picker',
+                'date_time_picker',
+                'color_picker',
             ],
         ];
 
