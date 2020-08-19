@@ -7,7 +7,6 @@ use ElementorPro\Modules\DynamicTags\Module;
 Class UserRole extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_name() {
-
         return 'dynamic-tags-user-role';
     }
 
@@ -30,6 +29,9 @@ Class UserRole extends \Elementor\Core\DynamicTags\Tag {
 
     public function render() {
         $userId = get_current_user_id();
+        if ( empty( $userId ) ) {
+            return;
+        }
         $userInfo = get_userdata( $userId );
         $userRoles = implode( ', ', $userInfo->roles );
         echo $userRoles;
