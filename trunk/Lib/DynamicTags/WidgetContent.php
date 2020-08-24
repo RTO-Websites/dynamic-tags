@@ -7,7 +7,7 @@ use Elementor\Plugin;
 use Elementor\Widget_Base;
 use ElementorPro\Modules\DynamicTags\Module;
 
-class WidgetContent extends \Elementor\Core\DynamicTags\Tag {
+class WidgetContent extends \Elementor\Core\DynamicTags\Data_Tag {
 
     public function get_name() {
 
@@ -48,10 +48,11 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Tag {
         );
     }
 
-    public function render() {
+    public function get_value( array $options = [] ) {
+        ob_start();
         if ( filter_input( INPUT_POST, 'action' ) === 'elementor_ajax' ) {
             $actions = filter_input( INPUT_POST, 'actions' );
-            $actions = json_decode( $actions);
+            $actions = json_decode( $actions );
 
             if ( !empty( $actions->save_builder ) ) {
                 return;
@@ -94,6 +95,8 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Tag {
             []
         );
         $tempWidget->print_element();
+
+        return ob_get_clean();
     }
 
     /**

@@ -4,7 +4,7 @@ namespace DynamicTags\Lib\DynamicTags;
 
 use ElementorPro\Modules\DynamicTags\Module;
 
-class CurrentUrl extends \Elementor\Core\DynamicTags\Tag {
+class CurrentUrl extends \Elementor\Core\DynamicTags\Data_Tag {
 
     public function get_name() {
 
@@ -27,8 +27,8 @@ class CurrentUrl extends \Elementor\Core\DynamicTags\Tag {
     protected function _register_controls() {
     }
 
-    public function render() {
-        echo ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    public function get_value(array $options = []) {
+        return ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
 }

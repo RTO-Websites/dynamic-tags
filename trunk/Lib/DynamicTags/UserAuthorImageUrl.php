@@ -5,7 +5,7 @@ namespace DynamicTags\Lib\DynamicTags;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
-class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Tag {
+class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Data_Tag {
 
     public function get_name() {
 
@@ -42,7 +42,7 @@ class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Tag {
 
     }
 
-    public function render() {
+    public function get_value( array $options = [] ) {
         $settings = $this->get_settings();
 
         if ( $settings['authorOrUser'] === 'user' ) {
@@ -52,27 +52,25 @@ class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Tag {
         }
 
         if ( empty( $userId ) ) {
-            return;
+            return '';
         }
 
 
         $imageData = get_avatar_data( $userId, [
             'default' => '404',
-
         ] );
 
         if ( empty( $imageData ) || empty( $imageData['url'] ) ) {
-            return;
+            return '';
         }
 
         $response = wp_remote_head( $imageData['url'] );
 
         if ( is_wp_error( $response ) || $response['response']['code'] === 404 ) {
-            echo '';
-            return;
+            return '';
         }
 
-        echo $imageData['url'];
+        return wp_kses_post( $imageData['url'] );
     }
 
 }
