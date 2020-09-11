@@ -2,6 +2,7 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use Elementor\Controls_Manager;
 use Elementor\Core\DynamicTags\Tag;
 use ElementorPro\Modules\DynamicTags\Module;
 
@@ -26,15 +27,25 @@ class PostContent extends Tag {
         return [ Module::TEXT_CATEGORY ];
     }
 
+
+    protected function _register_controls() {
+        $this->add_control(
+            'withoutFilters',
+            [
+                'label' => __( 'Without filters', 'dynamic-tags' ),
+                'type' => Controls_Manager::SWITCHER,
+            ]
+        );
+    }
+
     public function render() {
-        $post = get_post();
+        $withoutFilters = $this->get_settings( 'withoutFilters' );
+        $postContent = get_the_content();
 
-        if ( !$post || empty( $post->post_content ) ) {
-            return;
+        $content = wp_kses_post( $postContent );
+        if ( empty( $withoutFilters ) ) {
+            $content = apply_filters( 'the_content', $content );
         }
-
-        $content = wp_kses_post( $post->post_content );
-        $content = apply_filters( 'the_content', $content );
         if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
             $content = strip_tags( $content, '<br><p><a>' );
         }
