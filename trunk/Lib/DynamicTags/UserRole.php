@@ -28,16 +28,6 @@ class UserRole extends \Elementor\Core\DynamicTags\Tag {
 
     protected function register_controls() {
 
-        $options = [
-            'currentuser' => 'Current User',
-            'currentauthor' => 'Current Author',
-        ];
-
-        $users = get_users( [ 'fields' => [ 'id', 'user_login' ] ] );
-        foreach ( $users as $user ) {
-            $options[$user->id] = $user->user_login;
-        }
-
         $this->add_control(
             'key',
             [
