@@ -25,7 +25,7 @@ class IsHome extends \Elementor\Core\DynamicTags\Tag {
         return [ Module::TEXT_CATEGORY ];
     }
 
-    protected function _register_controls() {
+    protected function register_controls() {
 
     }
 
