@@ -57,14 +57,6 @@ class UserRole extends \Elementor\Core\DynamicTags\Tag {
                 'default' => ', ',
             ]
         );
-    /**
-     * Legacy for elementor < 3.1
-     */
-    protected function _register_controls() {
-        $this->register_controls();
-    }
-
-    protected function register_controls() {
 
         $this->add_control(
             'key',
