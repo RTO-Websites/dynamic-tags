@@ -25,7 +25,7 @@ class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Data_Tag {
         return [ Module::TEXT_CATEGORY, Module::URL_CATEGORY ];
     }
 
-    protected function _register_controls() {
+    protected function register_controls() {
         $this->add_control(
             'authorOrUser',
             [

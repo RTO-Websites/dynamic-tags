@@ -24,7 +24,7 @@ class CurrentUrl extends \Elementor\Core\DynamicTags\Data_Tag {
         return [ Module::TEXT_CATEGORY ];
     }
 
-    protected function _register_controls() {
+    protected function register_controls() {
     }
 
     public function get_value(array $options = []) {
