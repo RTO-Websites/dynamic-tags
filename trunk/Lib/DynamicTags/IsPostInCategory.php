@@ -49,8 +49,8 @@ class IsPostInCategory extends \Elementor\Core\DynamicTags\Tag {
         $settings = $this->get_settings();
         $categories = $this->getCategories();
         $query = [];
-        for ( $i = 0; $i < count( $settings['categories'] ); $i++ ) {
-            $query[] = $categories[$settings['categories'][$i]];
+        foreach ( $settings['categories'] as $id ) {
+            $query[] = $categories[$id];
         }
 
         echo in_category( $query );
@@ -67,7 +67,7 @@ class IsPostInCategory extends \Elementor\Core\DynamicTags\Tag {
             ]
         );
         foreach ( $categories as $category ) {
-            $categoryNames[] = $category->name;
+            $categoryNames[$category->term_id] = $category->name;
         }
 
         return $categoryNames;
