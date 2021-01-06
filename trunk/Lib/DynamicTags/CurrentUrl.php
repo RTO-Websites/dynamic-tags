@@ -23,7 +23,7 @@ class CurrentUrl extends \Elementor\Core\DynamicTags\Data_Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return [ Module::TEXT_CATEGORY, Module::URL_CATEGORY ];
     }
 
     protected function register_controls() {
