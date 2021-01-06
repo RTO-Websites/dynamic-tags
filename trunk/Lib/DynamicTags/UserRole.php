@@ -57,26 +57,6 @@ class UserRole extends \Elementor\Core\DynamicTags\Tag {
                 'default' => ', ',
             ]
         );
-
-        $this->add_control(
-            'key',
-            [
-                'label' => __( 'Key', 'elementor-pro' ),
-                'type' => Controls_Manager::SELECT,
-                'label_block' => true,
-                'default' => 'currentuser',
-                'options' => $options,
-            ]
-        );
-
-        $this->add_control(
-            'separator',
-            [
-                'label' => __( 'Seperator', 'elementor-pro' ),
-                'type' => Controls_Manager::TEXT,
-                'default' => ', ',
-            ]
-        );
     }
 
     public function render() {
