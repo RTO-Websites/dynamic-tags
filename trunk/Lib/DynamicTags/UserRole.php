@@ -28,6 +28,44 @@ class UserRole extends \Elementor\Core\DynamicTags\Tag {
 
     protected function register_controls() {
 
+        $options = [
+            'currentuser' => 'Current User',
+            'currentauthor' => 'Current Author',
+        ];
+
+        $users = get_users( [ 'fields' => [ 'id', 'user_login' ] ] );
+        foreach ( $users as $user ) {
+            $options[$user->id] = $user->user_login;
+        }
+
+        $this->add_control(
+            'key',
+            [
+                'label' => __( 'Key', 'elementor-pro' ),
+                'type' => Controls_Manager::SELECT,
+                'label_block' => true,
+                'default' => 'currentuser',
+                'options' => $options,
+            ]
+        );
+
+        $this->add_control(
+            'separator',
+            [
+                'label' => __( 'Seperator', 'elementor-pro' ),
+                'type' => Controls_Manager::TEXT,
+                'default' => ', ',
+            ]
+        );
+    /**
+     * Legacy for elementor < 3.1
+     */
+    protected function _register_controls() {
+        $this->register_controls();
+    }
+
+    protected function register_controls() {
+
         $this->add_control(
             'key',
             [
