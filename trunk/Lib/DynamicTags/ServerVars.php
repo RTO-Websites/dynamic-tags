@@ -27,6 +27,13 @@ class ServerVars extends Tag {
         return [ Module::TEXT_CATEGORY ];
     }
 
+    /**
+     * Legacy for elementor < 3.1
+     */
+    protected function _register_controls() {
+        $this->register_controls();
+    }
+
     protected function register_controls() {
         $options = [];
         foreach ( array_keys( $_SERVER ) as $key ) {

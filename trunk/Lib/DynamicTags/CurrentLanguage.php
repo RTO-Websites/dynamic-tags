@@ -23,6 +23,13 @@ class CurrentLanguage extends \Elementor\Core\DynamicTags\Tag {
         return [ Module::TEXT_CATEGORY ];
     }
 
+    /**
+     * Legacy for elementor < 3.1
+     */
+    protected function _register_controls() {
+        $this->register_controls();
+    }
+
     protected function register_controls() {
 
     }
