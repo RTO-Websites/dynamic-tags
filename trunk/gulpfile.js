@@ -5,7 +5,7 @@ var gulp = require('gulp'),
   minifycss = require('gulp-clean-css'),//https://github.com/scniro/gulp-clean-css
   rename = require('gulp-rename');//https://www.npmjs.org/package/gulp-rename
 
-gulp.task('default', function () {
+gulp.task('default', function (done) {
   // Admin
   var sassAdminFiles = ['Admin/scss/*.*'];
   gulp.src(sassAdminFiles)
@@ -25,4 +25,6 @@ gulp.task('default', function () {
     .pipe(rename({suffix: '.min'}))
     .pipe(minifycss())
     .pipe(gulp.dest('Public/css'));
+
+  done();
 });
