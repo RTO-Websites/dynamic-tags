@@ -25,6 +25,13 @@ class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Data_Tag {
         return [ Module::TEXT_CATEGORY, Module::URL_CATEGORY ];
     }
 
+    /**
+     * Legacy for elementor < 3.1
+     */
+    protected function _register_controls() {
+        $this->register_controls();
+    }
+
     protected function register_controls() {
         $this->add_control(
             'authorOrUser',
