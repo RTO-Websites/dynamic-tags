@@ -3,9 +3,12 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use ElementorPro\Modules\DynamicTags\Module;
 
 class IsSingular extends \Elementor\Core\DynamicTags\Tag {
+    use ElementBase;
+
     public function get_name() {
         return 'dynamic-tags-is-singular';
     }
