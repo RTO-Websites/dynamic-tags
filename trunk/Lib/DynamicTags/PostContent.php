@@ -2,6 +2,7 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use Elementor\Controls_Manager;
 use Elementor\Core\DynamicTags\Tag;
 use ElementorPro\Modules\DynamicTags\Module;
@@ -11,6 +12,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 class PostContent extends Tag {
+    use ElementBase;
     public function get_name() {
         return 'dynamic-tags-post-content';
     }
@@ -25,13 +27,6 @@ class PostContent extends Tag {
 
     public function get_categories() {
         return [ Module::TEXT_CATEGORY ];
-    }
-
-    /**
-     * Legacy for elementor < 3.1
-     */
-    protected function _register_controls() {
-        $this->register_controls();
     }
 
     protected function register_controls() {

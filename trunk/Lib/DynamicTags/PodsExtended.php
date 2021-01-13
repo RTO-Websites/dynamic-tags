@@ -5,11 +5,13 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use ElementorPro\Modules\DynamicTags\Pods\Tags\Pods_Text;
 use ElementorPro\Modules\DynamicTags\Pods\pods_api;
 
 if (function_exists('pods_api')) {
     class PodsExtended extends Pods_Text {
+        use ElementBase;
 
         public function get_name() {
             return 'dynamic-tags-pods-extended';

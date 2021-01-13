@@ -2,10 +2,12 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
 class CurrentUserCan extends \Elementor\Core\DynamicTags\Tag {
+    use ElementBase;
 
     public function get_name() {
 
@@ -23,13 +25,6 @@ class CurrentUserCan extends \Elementor\Core\DynamicTags\Tag {
 
     public function get_categories() {
         return [ Module::TEXT_CATEGORY ];
-    }
-
-    /**
-     * Legacy for elementor < 3.1
-     */
-    protected function _register_controls() {
-        $this->register_controls();
     }
 
     protected function register_controls() {

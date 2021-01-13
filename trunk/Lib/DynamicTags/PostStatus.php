@@ -2,6 +2,7 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use Elementor\Core\DynamicTags\Tag;
 use ElementorPro\Modules\DynamicTags\Module;
 
@@ -10,6 +11,8 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 class PostStatus extends Tag {
+    use ElementBase;
+
     public function get_name() {
         return 'dynamic-tags-post-status';
     }
