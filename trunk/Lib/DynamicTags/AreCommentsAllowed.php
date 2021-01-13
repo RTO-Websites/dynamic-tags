@@ -2,10 +2,12 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
 Class AreCommentsAllowed extends \Elementor\Core\DynamicTags\Tag {
+    use ElementBase;
 
     public function get_name() {
         return 'dynamic-tags-are-comments-allowed';

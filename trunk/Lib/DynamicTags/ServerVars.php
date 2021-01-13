@@ -2,6 +2,7 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use Elementor\Core\DynamicTags\Tag;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
@@ -11,6 +12,8 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 class ServerVars extends Tag {
+    use ElementBase;
+
     public function get_name() {
         return 'dynamic-tags-server-vars';
     }
@@ -25,13 +28,6 @@ class ServerVars extends Tag {
 
     public function get_categories() {
         return [ Module::TEXT_CATEGORY ];
-    }
-
-    /**
-     * Legacy for elementor < 3.1
-     */
-    protected function _register_controls() {
-        $this->register_controls();
     }
 
     protected function register_controls() {

@@ -2,9 +2,11 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use ElementorPro\Modules\DynamicTags\Module;
 
 Class IsAuthorOfPost extends \Elementor\Core\DynamicTags\Tag {
+    use ElementBase;
 
     public function get_name() {
         return 'dynamic-tags-is-author-of-post';
