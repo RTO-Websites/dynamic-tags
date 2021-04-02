@@ -26,11 +26,14 @@ class WooCommerceIsFeatured extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function get_group() {
+        if ( !class_exists( 'WooCommerce' ) ) {
+            return '';
+        }
         return [ Module::POST_GROUP ];
     }
 
     public function render() {
-        if ( !function_exists( 'wp_get_product' ) ) {
+        if ( !function_exists( 'wc_get_product' ) ) {
             return;
         }
         $product = wc_get_product();
