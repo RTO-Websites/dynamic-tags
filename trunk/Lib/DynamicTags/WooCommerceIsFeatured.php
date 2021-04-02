@@ -14,11 +14,7 @@ class WooCommerceIsFeatured extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function get_title() {
-        return __( 'WooCommerce is featured', 'dynamic-tags' );
-    }
-
-    public function get_group() {
-        return [ Module::POST_GROUP ];
+        return __( 'WooCommerce is a featured product', 'dynamic-tags' );
     }
 
     public function get_categories() {
@@ -27,6 +23,10 @@ class WooCommerceIsFeatured extends \Elementor\Core\DynamicTags\Tag {
 
     protected function register_controls() {
 
+    }
+
+    public function get_group() {
+        return [ Module::POST_GROUP ];
     }
 
     public function render() {
