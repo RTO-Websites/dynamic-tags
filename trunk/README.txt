@@ -4,7 +4,7 @@ Donate link: https://www.rto.de/
 Tags: elementor, dynamic tags
 Requires at least: 5.0
 Tested up to: 5.7
-Stable tag: 1.1.3
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,9 @@ It provides the following tags:
 
 
 == Changelog ==
+= 1.2 =
+* Add session
+
 = 1.1 =
 * Fix issues
 * Add option to render post-content without wp-filters
