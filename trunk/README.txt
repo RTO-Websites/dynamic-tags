@@ -4,7 +4,7 @@ Donate link: https://www.rto.de/
 Tags: elementor, dynamic tags
 Requires at least: 5.0
 Tested up to: 5.7
-Stable tag: 1.1.3
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,7 @@ It provides the following tags:
 
 = Text-Tags =
 - Cookies (you can select between all setted cookies)
+- Session (you can select between all setted session keys)
 - Current-Language (returns current language from WPML or Polylang)
 - Current-Url (returns the actually called url)
 - NumberPostsQuery (return number of posts with a custom query)
@@ -50,6 +51,9 @@ It provides the following tags:
 
 
 == Changelog ==
+= 1.2 =
+* Add session
+
 = 1.1 =
 * Fix issues
 * Add option to render post-content without wp-filters
