@@ -20,6 +20,7 @@ It provides the following tags:
 
 = Text-Tags =
 - Cookies (you can select between all setted cookies)
+- Session (you can select between all setted session keys)
 - Current-Language (returns current language from WPML or Polylang)
 - Current-Url (returns the actually called url)
 - NumberPostsQuery (return number of posts with a custom query)
