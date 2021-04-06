@@ -2,10 +2,12 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
 class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Data_Tag {
+    use ElementBase;
 
     public function get_name() {
 
@@ -23,13 +25,6 @@ class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Data_Tag {
 
     public function get_categories() {
         return [ Module::TEXT_CATEGORY, Module::URL_CATEGORY ];
-    }
-
-    /**
-     * Legacy for elementor < 3.1
-     */
-    protected function _register_controls() {
-        $this->register_controls();
     }
 
     protected function register_controls() {

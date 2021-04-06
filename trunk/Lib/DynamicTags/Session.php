@@ -6,15 +6,15 @@ use DynamicTags\Lib\ElementBase;
 use Elementor\Controls_Manager;
 use ElementorPro\Modules\DynamicTags\Module;
 
-class Cookies extends \Elementor\Core\DynamicTags\Tag {
+class Session extends \Elementor\Core\DynamicTags\Tag {
     use ElementBase;
 
     public function get_name() {
-        return 'dynamic-tags-cookies';
+        return 'dynamic-tags-session';
     }
 
     public function get_title() {
-        return __( 'Cookies', 'dynamic-tags' );
+        return __( 'Session', 'dynamic-tags' );
     }
 
 
@@ -28,35 +28,27 @@ class Cookies extends \Elementor\Core\DynamicTags\Tag {
 
     protected function register_controls() {
         $this->add_control(
-            'CookieName',
+            'SessionKey',
             [
-                'label' => __( 'Cookie Name', 'dynamic-tags' ),
-                'type' => Controls_Manager::SELECT,
+                'label' => __( 'Session Key', 'dynamic-tags' ),
+                'type' => Controls_Manager::TEXT,
                 'label_block' => true,
-                'default' => [],
-                'options' => $this->getCookieNames(),
-
+                'default' => '',
             ]
         );
     }
 
     public function render() {
         $settings = $this->get_settings();
-        $key = $settings['CookieName'];
-        $value = filter_input( INPUT_COOKIE, $key );
+        $key = $settings['SessionKey'];
+        if ( empty( $key ) || empty( $_SESSION[$key] ) ) {
+            return;
+        }
+        $value = filter_var( $_SESSION[$key] );
         echo wp_kses_post( $value );
     }
 
     public function get_panel_template_setting_key() {
-        return 'CookieName';
-    }
-
-    private function getCookieNames() {
-        $names = [];
-        foreach ( $_COOKIE as $key => $val ) {
-            $key = esc_attr( $key );
-            $names[$key] = $key;
-        }
-        return $names;
+        return 'SessionKey';
     }
 }

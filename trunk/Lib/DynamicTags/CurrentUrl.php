@@ -2,9 +2,11 @@
 
 namespace DynamicTags\Lib\DynamicTags;
 
+use DynamicTags\Lib\ElementBase;
 use ElementorPro\Modules\DynamicTags\Module;
 
 class CurrentUrl extends \Elementor\Core\DynamicTags\Data_Tag {
+    use ElementBase;
 
     public function get_name() {
 
@@ -21,7 +23,7 @@ class CurrentUrl extends \Elementor\Core\DynamicTags\Data_Tag {
     }
 
     public function get_categories() {
-        return [ Module::TEXT_CATEGORY ];
+        return [ Module::TEXT_CATEGORY, Module::URL_CATEGORY ];
     }
 
     protected function register_controls() {
