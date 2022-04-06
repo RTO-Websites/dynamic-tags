@@ -3,12 +3,12 @@ Contributors: rtowebsites
 Donate link: https://www.rto.de/
 Tags: elementor, dynamic tags
 Requires at least: 5.0
-Tested up to: 5.7
-Stable tag: 1.2.0
+Tested up to: 5.9
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Adds some useful dynamic-tags for elementor
+Adds some useful dynamic-tags for elementor. Requires Elementor > 3.1
 
 == Description ==
 
@@ -51,6 +51,9 @@ It provides the following tags:
 
 
 == Changelog ==
+= 1.2.1 =
+* Fix deprecated warnings
+
 = 1.2 =
 * Add session
 
