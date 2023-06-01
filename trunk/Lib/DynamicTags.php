@@ -124,7 +124,7 @@ class DynamicTags {
     }
 
     public function defineElementorHooks() {
-        $this->getLoader()->addAction( 'elementor/dynamic_tags/register_tags', $this, 'registerDynamicTags', 10, 1 );
+        $this->getLoader()->addAction( 'elementor/dynamic_tags/register', $this, 'registerDynamicTags', 10, 1 );
     }
 
     /**
@@ -149,7 +149,7 @@ class DynamicTags {
                 continue;
             }
 
-            $dynamicTags->register_tag( $className );
+            $dynamicTags->register( new $className() );
         }
     }
 
