@@ -30,7 +30,7 @@ Class IsFrontpage extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render() {
-        echo is_frontpage();
+        echo is_front_page();
     }
 
 
