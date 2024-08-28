@@ -3,8 +3,9 @@ Contributors: rtowebsites
 Donate link: https://www.rto.de/
 Tags: elementor, dynamic tags
 Requires at least: 5.0
-Tested up to: 6.3
-Stable tag: 1.2.2
+Tested up to: 6.6
+Stable tag: 1.3.0
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +30,7 @@ It provides the following tags:
 - User/Author Image (returns the user/author image-url or false if not found)
 - User Role (returns a comma-separated list of current user roles)
 - WidgetContent (returns content of a widget selected by widget-id)
+- Acf Repeater (returns content of an acf-repeater field)
 
 = Post Tags =
 - Post Content
@@ -51,6 +53,9 @@ It provides the following tags:
 
 
 == Changelog ==
+= 1.3.0 =
+* Add acf-repeater tag
+
 = 1.2.2 =
 * Fix deprecated warnings
 

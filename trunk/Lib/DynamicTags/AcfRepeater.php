@@ -11,19 +11,19 @@ use Elementor\Core\DynamicTags\Tag;
 
 class AcfRepeater extends Data_Tag {
 
-    public function get_name() {
+    public function get_name(): string {
         return 'acf-repeater';
     }
 
-    public function get_title() {
+    public function get_title(): string {
         return __( 'ACF', 'elementor-pro' ) . ' ' . __( 'Repeater', 'elementor-pro' );
     }
 
-    public function get_group() {
+    public function get_group(): string {
         return ACFModule::ACF_GROUP;
     }
 
-    protected function _register_controls() {
+    protected function register_controls(): void {
 
         $fieldTypes = [
             'text' => __( 'ACF-Text', 'dynamic-tags' ),
@@ -171,7 +171,8 @@ class AcfRepeater extends Data_Tag {
                 'options' => [
                     'bool' => '0/1',
                     'yesno' => 'yes/no',
-                    'fieldname' => 'Fieldname/nothing',
+                    'fieldname' => 'Only fieldname',
+                    'fieldname_yesno' => 'Fieldname: yes/no',
                 ],
                 'default' => 'yesno',
                 'condition' => [ 'fieldType' => 'true_false' ],
@@ -241,13 +242,7 @@ class AcfRepeater extends Data_Tag {
         );
     }
 
-    /**
-     * @param array $types
-     * @param array $subtypes
-     *
-     * @return array
-     */
-    public static function getControlOptions( $types, $subtypes ) {
+    public static function getControlOptions( array $types, array $subtypes ): array {
         // ACF >= 5.0.0
         if ( function_exists( 'acf_get_field_groups' ) ) {
             $acf_groups = acf_get_field_groups();
@@ -324,10 +319,6 @@ class AcfRepeater extends Data_Tag {
                 continue;
             }
 
-            /*if ( 1 === count( $options ) ) {
-                $options = [ -1 => ' -- ' ] + $options;
-            }*/
-
             $groups[] = [
                 'label' => $acf_group['title'],
                 'options' => $options,
@@ -355,7 +346,7 @@ class AcfRepeater extends Data_Tag {
                 null, null,
             ];
         }
-        list( $field_key, $meta_key, $parent_key, $parent_meta_key ) = explode( ':', $key );
+        [ $field_key, $meta_key, $parent_key, $parent_meta_key ] = explode( ':', $key );
 
         if ( 'options' === $field_key ) {
             $parentField = get_field_object( $meta_key, $parent_key );
@@ -395,14 +386,18 @@ class AcfRepeater extends Data_Tag {
         return [ $field, $values ];
     }
 
+    /**
+     * @return array|string
+     */
     public function get_value( array $options = [] ) {
-        list( $field, $values ) = $this->getTagValueField( $this );
+        [ $field, $values ] = $this->getTagValueField( $this );
         if ( empty( $values ) ) {
-            return;
+            return '';
         }
 
         $separator = $this->get_settings( 'separator' ) ?? '';
         $outputFormat = $this->get_settings( 'outputFormat' );
+        $addWrapper = $this->get_settings( 'addWrapper' );
         $valuesAsArray = [];
 
         switch ( $field['type'] ) {
@@ -438,8 +433,25 @@ class AcfRepeater extends Data_Tag {
                         break;
 
                     case 'fieldname':
+                        $fieldNames = [];
+                        foreach ( $values as $value ) {
+                            if ( empty( $value ) ) {
+                                continue;
+                            }
+                            $fieldNames[] = $field['label'];
+                        }
+                        $values = $fieldNames;
+                        break;
+
+                    case 'fieldname_yesno':
                         foreach ( $values as &$value ) {
-                            $value = $value ? $field['label'] : '';
+                            if ( empty( $addWrapper ) ) {
+                                $value = $field['label'] . ': ' . ($value ? __( 'Yes' ) : __( 'No' ));
+                                continue;
+                            }
+                            $value = '<span class="acf-repeater-label">' . $field['label']
+                            . '</span><span class="acf-repeater-value">' . ($value ? __( 'Yes' ) : __( 'No' )) . '</span>';
+
                         }
                         break;
                 }
@@ -449,15 +461,18 @@ class AcfRepeater extends Data_Tag {
             case 'gallery':
                 $count = 0;
                 $imageSeparator = $this->get_settings( 'imageSeparator' ) ?? '';
-                foreach ( $values as &$value ) {
+                $filteredValues = [];
+                foreach ( $values as $value ) {
                     if ( empty( $value ) ) {
                         continue;
                     }
 
                     $this->formatImages( $value, $valuesAsArray, $count );
                     $value = implode( $imageSeparator, $value );
+                    $filteredValues[] = $value;
                     $count += 1;
                 }
+                $values = $filteredValues;
 
                 break;
 
@@ -475,17 +490,16 @@ class AcfRepeater extends Data_Tag {
             return $valuesAsArray;
         }
 
-        if ( !empty( $this->get_settings( 'addWrapper' ) ) ) {
+        if ( !empty( $addWrapper ) ) {
             foreach ( $values as &$value ) {
                 $value = '<span class="acf-repeater-item">' . $value . '</span>';
             }
         }
 
         return wp_kses_post( implode( $separator, $values ) );
-        #var_dump( $field['type'] );
     }
 
-    private function formatImages( &$images, &$imageArray, $count = 0 ) {
+    private function formatImages( &$images, &$imageArray, $count = 0 ): void {
         $imageSize = $this->get_settings( 'imageSize' );
         $outputFormat = $this->get_settings( 'outputFormat' );
 
@@ -511,7 +525,8 @@ class AcfRepeater extends Data_Tag {
                     }
 
                     if ( !empty( $linkImages ) ) {
-                        $image = '<a ' . $slideshow . 'class="acf-repeater-image-link" href="' . wp_get_attachment_url( $imageId ) . '">' . $image . '</a>';
+                        $image = '<a ' . $slideshow . ' class="acf-repeater-image-link" href="'
+                            . wp_get_attachment_url( $imageId ) . '">' . $image . '</a>';
                     }
                 }
                 break;
@@ -525,7 +540,7 @@ class AcfRepeater extends Data_Tag {
 
     }
 
-    private function getImageSizes() {
+    private function getImageSizes(): array {
         $result = [ 'full' => 'Fullsize' ];
         if ( function_exists( 'wp_get_registered_image_subsizes' ) ) {
             // wp >= 5.3
