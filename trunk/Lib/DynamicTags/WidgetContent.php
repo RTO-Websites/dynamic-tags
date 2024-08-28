@@ -11,21 +11,21 @@ use ElementorPro\Modules\DynamicTags\Module;
 class WidgetContent extends \Elementor\Core\DynamicTags\Data_Tag {
     use ElementBase;
 
-    public function get_name() {
+    public function get_name(): string {
 
         return 'dynamic-tags-widget-content';
     }
 
-    public function get_title() {
+    public function get_title(): string {
         return __( 'Widget Content', 'dynamic-tags' );
     }
 
 
-    public function get_group() {
+    public function get_group(): array {
         return [ Module::SITE_GROUP ];
     }
 
-    public function get_categories() {
+    public function get_categories(): array {
         return [ Module::TEXT_CATEGORY ];
     }
 
@@ -57,26 +57,26 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Data_Tag {
             $actions = json_decode( $actions );
 
             if ( !empty( $actions->save_builder ) ) {
-                return;
+                return '';
             }
         }
         $settings = $this->get_settings();
 
         if ( empty( $settings['widget-id'] ) ) {
-            return;
+            return '';
         }
 
         $widgetId = $settings['widget-id'];
         $postId = $settings['post-id'] ?: get_post()->ID;
 
         if ( empty( $postId ) ) {
-            return;
+            return '';
         }
 
         $document = Plugin::$instance->documents->get_doc_for_frontend( $postId );
 
         if ( empty( $document ) ) {
-            return;
+            return '';
         }
 
         $elementorData = $document->get_elements_data();
@@ -85,7 +85,7 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Data_Tag {
         $this->makeFlat( $flatData, $elementorData );
 
         if ( empty( $flatData[$widgetId] ) ) {
-            return;
+            return '';
         }
 
         $flatData[$widgetId]['id'] = $widgetId;
@@ -106,7 +106,7 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Data_Tag {
      * @param array $data
      * @return mixed
      */
-    private function makeFlat( &$flatData, $data ) {
+    private function makeFlat( &$flatData, $data ): array {
         foreach ( $data as $element ) {
             if ( $element['elType'] === 'widget' ) {
                 $flatData[$element['id']] = $element;
