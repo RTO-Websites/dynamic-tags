@@ -7,9 +7,6 @@ spl_autoload_register(
         static $classes = null;
         if ($classes === null) {
             $classes = array(
-                'composer\\autoload\\classloader' => '/vendor/composer/ClassLoader.php',
-                'composer\\autoload\\composerstaticinit567cdaa4ef14d78383719945fdd9eba1' => '/vendor/composer/autoload_static.php',
-                'composerautoloaderinit567cdaa4ef14d78383719945fdd9eba1' => '/vendor/composer/autoload_real.php',
                 'dynamictags\\lib\\activator' => '/Lib/Activator.php',
                 'dynamictags\\lib\\deactivator' => '/Lib/Deactivator.php',
                 'dynamictags\\lib\\dynamictags' => '/Lib/DynamicTags.php',
@@ -19,6 +16,7 @@ spl_autoload_register(
                 'dynamictags\\lib\\dynamictags\\currentlanguage' => '/Lib/DynamicTags/CurrentLanguage.php',
                 'dynamictags\\lib\\dynamictags\\currenturl' => '/Lib/DynamicTags/CurrentUrl.php',
                 'dynamictags\\lib\\dynamictags\\currentusercan' => '/Lib/DynamicTags/CurrentUserCan.php',
+                'dynamictags\\lib\\dynamictags\\is404' => '/Lib/DynamicTags/Is404.php',
                 'dynamictags\\lib\\dynamictags\\isauthorofpost' => '/Lib/DynamicTags/IsAuthorOfPost.php',
                 'dynamictags\\lib\\dynamictags\\isfeed' => '/Lib/DynamicTags/IsFeed.php',
                 'dynamictags\\lib\\dynamictags\\isfrontpage' => '/Lib/DynamicTags/IsFrontpage.php',

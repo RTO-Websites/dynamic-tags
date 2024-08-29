@@ -24,6 +24,10 @@ class DynamicTags {
         $this->setLocale();
         $this->defineElementorHooks();
 
+        if (is_admin()) {
+            $this->defineAdminHooks();
+        }
+
     }
 
     private function loadDependencies(): void {
@@ -41,11 +45,48 @@ class DynamicTags {
 
     }
 
-    public function defineElementorHooks() {
+    public function defineElementorHooks(): void {
         $this->getLoader()->addAction( 'elementor/dynamic_tags/register', $this, 'registerDynamicTags', 10, 1 );
     }
 
-    public function registerDynamicTags( Manager $dynamicTags ) {
+    public function defineAdminHooks(): void {
+        // Register ajax
+        $this->loader->addAction( 'wp_ajax_dynamic_tags_get_elementor_data', $this, 'ajaxGetElementorData' );
+        $this->loader->addAction( 'admin_enqueue_scripts', $this, 'enqueueScripts' );
+        $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $this, 'enqueueScripts', 99999 );
+    }
+
+    public function ajaxGetElementorData() :void {
+        $postid = filter_input(INPUT_GET, 'postid');
+        $output = self::getElementorWidgets($postid);
+
+        echo json_encode($output);
+        die();
+
+    }
+
+    public static function getElementorWidgets($postid): array {
+        global $wpdb;
+        $queryString = "
+            SELECT
+                $wpdb->postmeta.meta_value
+                FROM $wpdb->postmeta
+                WHERE post_id = $postid 
+                  AND meta_key = '_elementor_data'";
+
+        $allPosts = $wpdb->get_results( $queryString, OBJECT );
+        $flatData = [];
+        self::makeElementorDataFlat( $flatData, json_decode($allPosts[0]->meta_value, true) );
+
+        $output = [];
+        foreach ($flatData as $widgetId => $widget) {
+            $output[$widgetId] = $widget['widgetType'] . ' ('.$widgetId.')';
+        }
+
+        return $output;
+    }
+
+    public function registerDynamicTags( Manager $dynamicTags ): void {
         $dir = self::INCLUDE_DIR . '/DynamicTags';
         foreach ( scandir( $dir ) as $tag ) {
             $className = explode( '.php', $tag )[0];
@@ -65,6 +106,19 @@ class DynamicTags {
             $dynamicTags->register( new $className() );
         }
     }
+    public static function makeElementorDataFlat( array &$flatData, array $data ): array {
+        foreach ( $data as $element ) {
+            if ( $element['elType'] === 'widget' ) {
+                $flatData[$element['id']] = $element;
+            }
+
+            if ( !empty( $element['elements'] ) ) {
+                self::makeElementorDataFlat( $flatData, $element['elements'] );
+            }
+        }
+
+        return $flatData;
+    }
 
     public function getDynamicTags(): string {
         return $this->pluginName;
@@ -73,6 +127,11 @@ class DynamicTags {
     public function getLoader(): Loader {
         return $this->loader;
     }
+
+    public function enqueueScripts() {
+        wp_enqueue_script( $this->pluginName, DynamicTags_URL . '/Admin/js/main.js', [ 'jquery' ], $this->version, false );
+    }
+
 
     public function getVersion(): string {
         return $this->version;
