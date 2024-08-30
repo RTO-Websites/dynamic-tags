@@ -55,20 +55,15 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Data_Tag {
             $postList[$post->ID] = ($post->post_title ?? $post->post_name) . " ($post->ID)";
         }
 
-        $postid = $this->get_settings('post-id');
-        $widgetList = [];
-        if (!empty($postid)) {
-            $widgetList = DynamicTags::getElementorWidgets($postid);
-        }
-
         $this->add_control(
             'dynamic-tags-post-id-select',
             [
-                'label' => __( 'Post ID' ),
+                'label' => __( 'Post' ),
                 'type' => Controls_Manager::SELECT,
                 'label_block' => false,
                 'options' => $postList,
                 'default' => '',
+                'render_type' => 'ui'
             ]
         );
         $this->add_control('post-id',
@@ -82,11 +77,12 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Data_Tag {
         $this->add_control(
             'dynamic-tags-widget-id-select',
             [
-                'label' => __( 'Widget ID' ),
+                'label' => __( 'Widget' ),
                 'type' => Controls_Manager::SELECT,
                 'label_block' => false,
-                'options' => $widgetList,
+                'options' => [],
                 'default' => '',
+                'render_type' => 'ui'
             ]
         );
         $this->add_control(

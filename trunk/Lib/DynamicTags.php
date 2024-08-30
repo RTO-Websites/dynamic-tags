@@ -62,7 +62,6 @@ class DynamicTags {
 
         echo json_encode($output);
         die();
-
     }
 
     public static function getElementorWidgets($postid): array {
@@ -86,26 +85,6 @@ class DynamicTags {
         return $output;
     }
 
-    public function registerDynamicTags( Manager $dynamicTags ): void {
-        $dir = self::INCLUDE_DIR . '/DynamicTags';
-        foreach ( scandir( $dir ) as $tag ) {
-            $className = explode( '.php', $tag )[0];
-            $fullClassName = self::TAG_NAMESPACE . 'DynamicTags\\' . $className;
-            if ( !file_exists( $dir . '/' . $tag ) || is_dir( $dir . '/' . $tag ) ) {
-                continue;
-            }
-
-            #include_once( $dir . '/' . $tag );
-
-            if ( class_exists( $fullClassName ) ) {
-                $className = $fullClassName;
-            } else if ( !class_exists( $className ) ) {
-                continue;
-            }
-
-            $dynamicTags->register( new $className() );
-        }
-    }
     public static function makeElementorDataFlat( array &$flatData, array $data ): array {
         foreach ( $data as $element ) {
             if ( $element['elType'] === 'widget' ) {
@@ -118,6 +97,25 @@ class DynamicTags {
         }
 
         return $flatData;
+    }
+
+    public function registerDynamicTags( Manager $dynamicTags ): void {
+        $dir = self::INCLUDE_DIR . '/DynamicTags';
+        foreach ( scandir( $dir ) as $tag ) {
+            $className = explode( '.php', $tag )[0];
+            $fullClassName = self::TAG_NAMESPACE . 'DynamicTags\\' . $className;
+            if ( !file_exists( $dir . '/' . $tag ) || is_dir( $dir . '/' . $tag ) ) {
+                continue;
+            }
+
+            if ( class_exists( $fullClassName ) ) {
+                $className = $fullClassName;
+            } else if ( !class_exists( $className ) ) {
+                continue;
+            }
+
+            $dynamicTags->register( new $className() );
+        }
     }
 
     public function getDynamicTags(): string {

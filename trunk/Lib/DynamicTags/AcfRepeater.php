@@ -328,7 +328,7 @@ class AcfRepeater extends Data_Tag {
         return $groups;
     }
 
-    public function get_categories() {
+    public function get_categories(): array {
         return [
             Module::TEXT_CATEGORY,
             Module::POST_META_CATEGORY,
@@ -337,7 +337,7 @@ class AcfRepeater extends Data_Tag {
     }
 
     // For use by ACF tags
-    public static function getTagValueField( Base_Tag $tag ) {
+    public static function getTagValueField( Base_Tag $tag ): array {
         $type = $tag->get_settings( 'fieldType' );
         $key = $tag->get_settings( $type . '_key' );
 
