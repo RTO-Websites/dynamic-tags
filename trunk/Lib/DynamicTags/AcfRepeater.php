@@ -245,38 +245,38 @@ class AcfRepeater extends Data_Tag {
     public static function getControlOptions( array $types, array $subtypes ): array {
         // ACF >= 5.0.0
         if ( function_exists( 'acf_get_field_groups' ) ) {
-            $acf_groups = acf_get_field_groups();
+            $acfGroups = acf_get_field_groups();
         } else {
-            $acf_groups = apply_filters( 'acf/get_field_groups', [] );
+            $acfGroups = apply_filters( 'acf/get_field_groups', [] );
         }
 
         $groups = [];
 
-        $options_page_groups_ids = [];
+        $optionsPageGroupsIds = [];
 
         if ( function_exists( 'acf_options_page' ) ) {
             $pages = acf_options_page()->get_pages();
             foreach ( $pages as $slug => $page ) {
-                $options_page_groups = acf_get_field_groups( [
+                $optionsPageGroups = acf_get_field_groups( [
                     'options_page' => $slug,
                 ] );
 
-                foreach ( $options_page_groups as $options_page_group ) {
-                    $options_page_groups_ids[] = $options_page_group['ID'];
+                foreach ( $optionsPageGroups as $optionsPageGroup ) {
+                    $optionsPageGroupsIds[] = $optionsPageGroup['ID'];
                 }
             }
         }
 
-        foreach ( $acf_groups as $acf_group ) {
+        foreach ( $acfGroups as $acfGroup ) {
             // ACF >= 5.0.0
             if ( function_exists( 'acf_get_fields' ) ) {
-                if ( isset( $acf_group['ID'] ) && !empty( $acf_group['ID'] ) ) {
-                    $fields = acf_get_fields( $acf_group['ID'] );
+                if ( isset( $acfGroup['ID'] ) && !empty( $acfGroup['ID'] ) ) {
+                    $fields = acf_get_fields( $acfGroup['ID'] );
                 } else {
-                    $fields = acf_get_fields( $acf_group );
+                    $fields = acf_get_fields( $acfGroup );
                 }
             } else {
-                $fields = apply_filters( 'acf/field_group/get_fields', [], $acf_group['id'] );
+                $fields = apply_filters( 'acf/field_group/get_fields', [], $acfGroup['id'] );
             }
 
             $options = [];
@@ -285,8 +285,8 @@ class AcfRepeater extends Data_Tag {
                 continue;
             }
 
-            $has_option_page_location = in_array( $acf_group['ID'], $options_page_groups_ids, true );
-            $is_only_options_page = $has_option_page_location && 1 === count( $acf_group['location'] );
+            $has_option_page_location = in_array( $acfGroup['ID'], $optionsPageGroupsIds, true );
+            $is_only_options_page = $has_option_page_location && 1 === count( $acfGroup['location'] );
 
             foreach ( $fields as $field ) {
                 if ( !in_array( $field['type'], $types, true ) ) {
@@ -320,7 +320,7 @@ class AcfRepeater extends Data_Tag {
             }
 
             $groups[] = [
-                'label' => $acf_group['title'],
+                'label' => $acfGroup['title'],
                 'options' => $options,
             ];
         } // End foreach().
@@ -346,14 +346,14 @@ class AcfRepeater extends Data_Tag {
                 null, null,
             ];
         }
-        [ $field_key, $meta_key, $parent_key, $parent_meta_key ] = explode( ':', $key );
+        [ $fieldKey, $metaKey, $parentKey, $parentMetaKey ] = explode( ':', $key );
 
-        if ( 'options' === $field_key ) {
-            $parentField = get_field_object( $meta_key, $parent_key );
-            $field = get_field_object( $parent_meta_key, $field_key );
+        if ( 'options' === $fieldKey ) {
+            $parentField = get_field_object( $metaKey, $parentKey );
+            $field = get_field_object( $parentMetaKey, $fieldKey );
         } else {
-            $parentField = get_field_object( $parent_key, get_queried_object() );
-            $field = get_field_object( $field_key, get_queried_object() );
+            $parentField = get_field_object( $parentKey, get_queried_object() );
+            $field = get_field_object( $fieldKey, get_queried_object() );
         }
 
         $max = $tag->get_settings( 'maxRows' );
@@ -446,11 +446,11 @@ class AcfRepeater extends Data_Tag {
                     case 'fieldname_yesno':
                         foreach ( $values as &$value ) {
                             if ( empty( $addWrapper ) ) {
-                                $value = $field['label'] . ': ' . ($value ? __( 'Yes' ) : __( 'No' ));
+                                $value = $field['label'] . ': ' . ( $value ? __( 'Yes' ) : __( 'No' ) );
                                 continue;
                             }
                             $value = '<span class="acf-repeater-label">' . $field['label']
-                            . '</span><span class="acf-repeater-value">' . ($value ? __( 'Yes' ) : __( 'No' )) . '</span>';
+                                . '</span><span class="acf-repeater-value">' . ( $value ? __( 'Yes' ) : __( 'No' ) ) . '</span>';
 
                         }
                         break;

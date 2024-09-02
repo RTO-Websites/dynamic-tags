@@ -28,7 +28,7 @@
       $input.trigger('input');
     });
 
-    jQuery(document).on('click', '.elementor-control-dynamic-tags-widget-id-select select', function(e) {
+    $(document).on('click', '.elementor-control-dynamic-tags-widget-id-select select', function(e) {
       console.log('click widget select')
       let $target = $(e.currentTarget),
         $parent = $target.closest('.dialog-message'),
@@ -42,7 +42,7 @@
   });
 
   function loadWidgetData(postid, $parent) {
-    jQuery.get(ajaxurl, {
+    $.get(ajaxurl, {
       action: 'dynamic_tags_get_elementor_data',
       postid: postid,
     }, function(data) {

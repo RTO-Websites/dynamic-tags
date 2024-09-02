@@ -20,6 +20,7 @@ The plugin requires Elementor Pro since it uses Dynamic Tags to set the comparis
 It provides the following tags:
 
 = Text-Tags =
+- Acf Repeater (returns content of an acf-repeater field)
 - Cookies (you can select between all set cookies)
 - Session (you can select between all set session keys)
 - Current-Language (returns current language from WPML or Polylang)
@@ -30,7 +31,6 @@ It provides the following tags:
 - User/Author Image (returns the user/author image-url or false if not found)
 - User Role (returns a comma-separated list of current user roles)
 - WidgetContent (returns content of a widget selected by widget-id)
-- Acf Repeater (returns content of an acf-repeater field)
 
 = Post Tags =
 - Post Content
@@ -55,6 +55,9 @@ It provides the following tags:
 == Changelog ==
 = 1.3.0 =
 * Add acf-repeater tag
+* Improve WidgetContent-tag
+* Add is404 tag
+* fix isFrontpage-tag
 
 = 1.2.2 =
 * Fix deprecated warnings
