@@ -9,25 +9,25 @@ use ElementorPro\Modules\DynamicTags\Module;
 class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Data_Tag {
     use ElementBase;
 
-    public function get_name() {
+    public function get_name(): string {
 
         return 'dynamic-tags-user-author-image-url';
     }
 
-    public function get_title() {
+    public function get_title(): string {
         return __( 'User/Author Image Url', 'dynamic-tags' );
     }
 
 
-    public function get_group() {
+    public function get_group(): array {
         return [ Module::SITE_GROUP ];
     }
 
-    public function get_categories() {
+    public function get_categories(): array {
         return [ Module::TEXT_CATEGORY, Module::URL_CATEGORY ];
     }
 
-    protected function register_controls() {
+    protected function register_controls(): void {
         $this->add_control(
             'authorOrUser',
             [
@@ -75,4 +75,7 @@ class UserAuthorImageUrl extends \Elementor\Core\DynamicTags\Data_Tag {
         return wp_kses_post( $imageData['url'] );
     }
 
+    public function get_panel_template_setting_key(): string {
+        return 'authorOrUser';
+    }
 }

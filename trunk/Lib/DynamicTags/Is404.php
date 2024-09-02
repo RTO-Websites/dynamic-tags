@@ -1,19 +1,21 @@
 <?php
 
+
 namespace DynamicTags\Lib\DynamicTags;
+
 
 use DynamicTags\Lib\ElementBase;
 use ElementorPro\Modules\DynamicTags\Module;
 
-Class IsFrontpage extends \Elementor\Core\DynamicTags\Tag {
+class Is404 extends \Elementor\Core\DynamicTags\Tag {
     use ElementBase;
 
     public function get_name(): string {
-        return 'dynamic-tags-is-frontpage';
+        return 'dynamic-tags-is-404';
     }
 
     public function get_title(): string {
-        return __( 'Is front page', 'dynamic-tags' );
+        return __( 'Is home', 'dynamic-tags' );
     }
 
 
@@ -30,8 +32,7 @@ Class IsFrontpage extends \Elementor\Core\DynamicTags\Tag {
     }
 
     public function render(): void {
-        echo is_front_page();
+        echo is_404();
     }
-
 
 }

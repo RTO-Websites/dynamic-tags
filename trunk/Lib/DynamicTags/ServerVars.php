@@ -14,23 +14,23 @@ if ( !defined( 'ABSPATH' ) ) {
 class ServerVars extends Tag {
     use ElementBase;
 
-    public function get_name() {
+    public function get_name(): string {
         return 'dynamic-tags-server-vars';
     }
 
-    public function get_title() {
+    public function get_title(): string {
         return __( 'Server Variables', 'dynamic-tags' );
     }
 
-    public function get_group() {
+    public function get_group(): string {
         return Module::SITE_GROUP;
     }
 
-    public function get_categories() {
+    public function get_categories(): array {
         return [ Module::TEXT_CATEGORY ];
     }
 
-    protected function register_controls() {
+    protected function register_controls(): void {
         $options = [];
         foreach ( array_keys( $_SERVER ) as $key ) {
             $key = esc_attr( $key );
@@ -54,11 +54,11 @@ class ServerVars extends Tag {
         );
     }
 
-    public function get_panel_template_setting_key() {
+    public function get_panel_template_setting_key(): string {
         return 'variable';
     }
 
-    public function render() {
+    public function render(): void {
         $settings = $this->get_settings();
         $key = $settings['variable'];
         if ( empty( $key ) ) {
