@@ -9,24 +9,24 @@ use ElementorPro\Modules\DynamicTags\Module;
 class UserRole extends \Elementor\Core\DynamicTags\Tag {
     use ElementBase;
 
-    public function get_name() {
+    public function get_name(): string {
         return 'dynamic-tags-user-role';
     }
 
-    public function get_title() {
+    public function get_title(): string {
         return __( 'User role', 'dynamic-tags' );
     }
 
 
-    public function get_group() {
+    public function get_group(): array {
         return [ Module::SITE_GROUP ];
     }
 
-    public function get_categories() {
+    public function get_categories(): array {
         return [ Module::TEXT_CATEGORY ];
     }
 
-    protected function register_controls() {
+    protected function register_controls(): void {
 
         $options = [
             'currentuser' => 'Current User',
@@ -59,7 +59,7 @@ class UserRole extends \Elementor\Core\DynamicTags\Tag {
         );
     }
 
-    public function render() {
+    public function render(): void {
         $userId = $this->get_settings( 'key' );
 
         switch ( $userId ) {

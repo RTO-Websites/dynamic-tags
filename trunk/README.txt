@@ -3,8 +3,9 @@ Contributors: rtowebsites
 Donate link: https://www.rto.de/
 Tags: elementor, dynamic tags
 Requires at least: 5.0
-Tested up to: 6.3
-Stable tag: 1.2.2
+Tested up to: 6.6
+Stable tag: 1.3.0
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +20,7 @@ The plugin requires Elementor Pro since it uses Dynamic Tags to set the comparis
 It provides the following tags:
 
 = Text-Tags =
+- Acf Repeater (returns content of an acf-repeater field)
 - Cookies (you can select between all set cookies)
 - Session (you can select between all set session keys)
 - Current-Language (returns current language from WPML or Polylang)
@@ -51,6 +53,12 @@ It provides the following tags:
 
 
 == Changelog ==
+= 1.3.0 =
+* Add acf-repeater tag
+* Improve WidgetContent-tag
+* Add is404 tag
+* fix isFrontpage-tag
+
 = 1.2.2 =
 * Fix deprecated warnings
 

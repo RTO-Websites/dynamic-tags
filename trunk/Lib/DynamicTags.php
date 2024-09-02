@@ -1,77 +1,20 @@
 <?php namespace DynamicTags\Lib;
 
-use DynamicTags\Admin\DynamicTagsAdmin;
-use DynamicTags\Pub\DynamicTagsPublic;
 use Elementor\Core\DynamicTags\Manager;
 
-/**
- * The file that defines the core plugin class
- *
- * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
- *
- * @link       https://www.rto.de
- * @since      1.0.0
- *
- * @package    DynamicTags
- */
 
-/**
- * The core plugin class.
- *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
- *
- * Also maintains the unique identifier of this plugin as well as the current
- * version of the plugin.
- *
- * @since      1.0.0
- * @package    DynamicTags
- * @author     RTO GmbH <kdhp-dev@rto.de>
- */
 class DynamicTags {
 
-    /**
-     * The loader that's responsible for maintaining and registering all hooks that power
-     * the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      Loader $loader Maintains and registers all hooks for the plugin.
-     */
-    protected $loader;
+    protected Loader $loader;
 
-    /**
-     * The unique identifier of this plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      string $pluginName The string used to uniquely identify this plugin.
-     */
-    protected $pluginName;
+    protected string $pluginName;
 
-    /**
-     * The current version of the plugin.
-     *
-     * @since    1.0.0
-     * @access   protected
-     * @var      string $version The current version of the plugin.
-     */
-    protected $version;
+    protected string $version;
 
 
     const INCLUDE_DIR = DynamicTags_DIR . '/Lib';
     const TAG_NAMESPACE = 'DynamicTags\\Lib\\';
 
-    /**
-     * Define the core functionality of the plugin.
-     *
-     * Set the plugin name and the plugin version that can be used throughout the plugin.
-     * Load the dependencies, define the locale, and set the hooks for the admin area and
-     * the public-facing side of the site.
-     *
-     * @since    1.0.0
-     */
     public function __construct() {
 
         $this->pluginName = 'dynamic-tags';
@@ -81,40 +24,19 @@ class DynamicTags {
         $this->setLocale();
         $this->defineElementorHooks();
 
+        if (is_admin()) {
+            $this->defineAdminHooks();
+        }
+
     }
 
-    /**
-     * Load the required dependencies for this plugin.
-     *
-     * Include the following files that make up the plugin:
-     *
-     * - DynamicTagsLoader. Orchestrates the hooks of the plugin.
-     * - DynamicTagsI18n. Defines internationalization functionality.
-     * - DynamicTagsAdmin. Defines all hooks for the admin area.
-     * - DynamicTagsPublic. Defines all hooks for the public side of the site.
-     *
-     * Create an instance of the loader which will be used to register the hooks
-     * with WordPress.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function loadDependencies() {
+    private function loadDependencies(): void {
 
         $this->loader = new Loader();
 
     }
 
-    /**
-     * Define the locale for this plugin for internationalization.
-     *
-     * Uses the DynamicTagsI18n class in order to set the domain and to register the hook
-     * with WordPress.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function setLocale() {
+    private function setLocale(): void {
 
         $pluginI18n = new I18n();
         $pluginI18n->setDomain( $this->getDynamicTags() );
@@ -123,16 +45,61 @@ class DynamicTags {
 
     }
 
-    public function defineElementorHooks() {
+    public function defineElementorHooks(): void {
         $this->getLoader()->addAction( 'elementor/dynamic_tags/register', $this, 'registerDynamicTags', 10, 1 );
     }
 
-    /**
-     * Register dynamic tags
-     *
-     * @param Manager $dynamicTags
-     */
-    public function registerDynamicTags( $dynamicTags ) {
+    public function defineAdminHooks(): void {
+        // Register ajax
+        $this->loader->addAction( 'wp_ajax_dynamic_tags_get_elementor_data', $this, 'ajaxGetElementorData' );
+        $this->loader->addAction( 'admin_enqueue_scripts', $this, 'enqueueScripts' );
+        $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $this, 'enqueueScripts', 99999 );
+    }
+
+    public function ajaxGetElementorData() :void {
+        $postid = filter_input(INPUT_GET, 'postid');
+        $output = self::getElementorWidgets($postid);
+
+        echo json_encode($output);
+        die();
+    }
+
+    public static function getElementorWidgets($postid): array {
+        global $wpdb;
+        $queryString = "
+            SELECT
+                $wpdb->postmeta.meta_value
+                FROM $wpdb->postmeta
+                WHERE post_id = $postid 
+                  AND meta_key = '_elementor_data'";
+
+        $allPosts = $wpdb->get_results( $queryString, OBJECT );
+        $flatData = [];
+        self::makeElementorDataFlat( $flatData, json_decode($allPosts[0]->meta_value, true) );
+
+        $output = [];
+        foreach ($flatData as $widgetId => $widget) {
+            $output[$widgetId] = $widget['widgetType'] . ' ('.$widgetId.')';
+        }
+
+        return $output;
+    }
+
+    public static function makeElementorDataFlat( array &$flatData, array $data ): array {
+        foreach ( $data as $element ) {
+            if ( $element['elType'] === 'widget' ) {
+                $flatData[$element['id']] = $element;
+            }
+
+            if ( !empty( $element['elements'] ) ) {
+                self::makeElementorDataFlat( $flatData, $element['elements'] );
+            }
+        }
+
+        return $flatData;
+    }
+
+    public function registerDynamicTags( Manager $dynamicTags ): void {
         $dir = self::INCLUDE_DIR . '/DynamicTags';
         foreach ( scandir( $dir ) as $tag ) {
             $className = explode( '.php', $tag )[0];
@@ -140,8 +107,6 @@ class DynamicTags {
             if ( !file_exists( $dir . '/' . $tag ) || is_dir( $dir . '/' . $tag ) ) {
                 continue;
             }
-
-            include_once( $dir . '/' . $tag );
 
             if ( class_exists( $fullClassName ) ) {
                 $className = $fullClassName;
@@ -153,43 +118,24 @@ class DynamicTags {
         }
     }
 
-    /**
-     * The name of the plugin used to uniquely identify it within the context of
-     * WordPress and to define internationalization functionality.
-     *
-     * @return    string    The name of the plugin.
-     * @since     1.0.0
-     */
-    public function getDynamicTags() {
+    public function getDynamicTags(): string {
         return $this->pluginName;
     }
 
-    /**
-     * The reference to the class that orchestrates the hooks with the plugin.
-     *
-     * @return    Loader    Orchestrates the hooks of the plugin.
-     * @since     1.0.0
-     */
-    public function getLoader() {
+    public function getLoader(): Loader {
         return $this->loader;
     }
 
-    /**
-     * Retrieve the version number of the plugin.
-     *
-     * @return    string    The version number of the plugin.
-     * @since     1.0.0
-     */
-    public function getVersion() {
+    public function enqueueScripts() {
+        wp_enqueue_script( $this->pluginName, DynamicTags_URL . '/Admin/js/main.js', [ 'jquery' ], $this->version, false );
+    }
+
+
+    public function getVersion(): string {
         return $this->version;
     }
 
-    /**
-     * Run the loader to execute all of the hooks with WordPress.
-     *
-     * @since    1.0.0
-     */
-    public static function run() {
+    public static function run(): void {
         $plugin = new self();
         $plugin->loader->run();
     }

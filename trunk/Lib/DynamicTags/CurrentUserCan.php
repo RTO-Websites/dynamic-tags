@@ -9,25 +9,25 @@ use ElementorPro\Modules\DynamicTags\Module;
 class CurrentUserCan extends \Elementor\Core\DynamicTags\Tag {
     use ElementBase;
 
-    public function get_name() {
+    public function get_name(): string {
 
         return 'dynamic-tags-current-user-can';
     }
 
-    public function get_title() {
+    public function get_title(): string {
         return __( 'Current user can', 'dynamic-tags' );
     }
 
 
-    public function get_group() {
+    public function get_group(): array {
         return [ Module::SITE_GROUP ];
     }
 
-    public function get_categories() {
+    public function get_categories(): array {
         return [ Module::TEXT_CATEGORY ];
     }
 
-    protected function register_controls() {
+    protected function register_controls(): void {
         $this->add_control(
             'capability',
             [
@@ -40,7 +40,7 @@ class CurrentUserCan extends \Elementor\Core\DynamicTags\Tag {
         );
     }
 
-    public function render() {
+    public function render(): void {
         $settings = $this->get_settings();
 
         if ( empty( $settings['capability'] ) ) {
@@ -50,7 +50,7 @@ class CurrentUserCan extends \Elementor\Core\DynamicTags\Tag {
         echo current_user_can( $settings['capability'] );
     }
 
-    public function getAllCapatibilities() {
+    public function getAllCapatibilities(): array {
         global $wp_roles;
         $roles = $wp_roles->roles;
         $list = [];
@@ -65,6 +65,10 @@ class CurrentUserCan extends \Elementor\Core\DynamicTags\Tag {
         }
 
         return $list;
+    }
+
+    public function get_panel_template_setting_key(): string {
+        return 'capability';
     }
 
 }
