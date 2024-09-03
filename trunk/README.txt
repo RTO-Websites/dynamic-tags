@@ -53,6 +53,13 @@ It provides the following tags:
 
 
 == Changelog ==
+= 1.4.0 =
+* Add singular/plural for post-types
+* Add human-readable and translated for user-roles
+* Add wrapper-option for user-role
+* Fix possible error with woocommerce is-featured
+* Post-Parent can now return title and name
+
 = 1.3.0 =
 * Add acf-repeater tag
 * Improve WidgetContent-tag
