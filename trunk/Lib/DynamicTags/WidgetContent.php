@@ -51,8 +51,8 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Data_Tag {
         $allPosts = $wpdb->get_results( $queryString, OBJECT );
 
         $postList = [];
-        foreach ($allPosts as $post) {
-            $postList[$post->ID] = ($post->post_title ?? $post->post_name) . " ($post->ID)";
+        foreach ( $allPosts as $post ) {
+            $postList[$post->ID] = ( $post->post_title ?? $post->post_name ) . " ($post->ID)";
         }
 
         $this->add_control(
@@ -63,32 +63,32 @@ class WidgetContent extends \Elementor\Core\DynamicTags\Data_Tag {
                 'label_block' => false,
                 'options' => $postList,
                 'default' => '',
-                'render_type' => 'ui'
+                'render_type' => 'ui',
             ]
         );
-        $this->add_control('post-id',
-        [
-            'label' => __( 'Post ID' ),
-            'type' => Controls_Manager::TEXT,
-            'label_block' => false,
-            'default' => '',
-        ]
+        $this->add_control( 'post-id',
+            [
+                'label' => __( 'Post ID', 'dynamic-tags' ),
+                'type' => Controls_Manager::TEXT,
+                'label_block' => false,
+                'default' => '',
+            ]
         );
         $this->add_control(
             'dynamic-tags-widget-id-select',
             [
-                'label' => __( 'Widget' ),
+                'label' => __( 'Widget', 'dynamic-tags' ),
                 'type' => Controls_Manager::SELECT,
                 'label_block' => false,
                 'options' => [],
                 'default' => '',
-                'render_type' => 'ui'
+                'render_type' => 'ui',
             ]
         );
         $this->add_control(
             'widget-id',
             [
-                'label' => __( 'Widget ID' ),
+                'label' => __( 'Widget ID', 'dynamic-tags' ),
                 'type' => Controls_Manager::TEXT,
                 'label_block' => false,
                 'default' => '',

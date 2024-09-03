@@ -58,8 +58,8 @@ class AcfRepeater extends Data_Tag {
         $outputOptions = [
             'ids' => 'IDs',
             'urls' => 'Urls',
-            'img' => __( 'Rendered &lt;img&gt;' ),
-            'array' => __( 'Array (for use in gallery-widget)' ),
+            'img' => __( 'Rendered &lt;img&gt;', 'dynamic-tags' ),
+            'array' => __( 'Array (for use in gallery-widget)', 'dynamic-tags' ),
         ];
 
         $this->add_control(
@@ -285,8 +285,8 @@ class AcfRepeater extends Data_Tag {
                 continue;
             }
 
-            $has_option_page_location = in_array( $acfGroup['ID'], $optionsPageGroupsIds, true );
-            $is_only_options_page = $has_option_page_location && 1 === count( $acfGroup['location'] );
+            $hasOptionPageLocation = in_array( $acfGroup['ID'], $optionsPageGroupsIds, true );
+            $isOnlyOptionsPage = $hasOptionPageLocation && 1 === count( $acfGroup['location'] );
 
             foreach ( $fields as $field ) {
                 if ( !in_array( $field['type'], $types, true ) ) {
@@ -302,10 +302,10 @@ class AcfRepeater extends Data_Tag {
                         continue;
                     }
                     // Use group ID for unique keys
-                    if ( $has_option_page_location ) {
+                    if ( $hasOptionPageLocation ) {
                         $key = 'options:' . $field['name'];
                         $options[$key] = __( 'Options', 'elementor-pro' ) . ':' . $field['label'];
-                        if ( $is_only_options_page ) {
+                        if ( $isOnlyOptionsPage ) {
                             continue;
                         }
                     }

@@ -40,8 +40,8 @@ class PostParent extends Tag {
                 'default' => 'id',
                 'options' => [
                     'id' => 'ID',
-                    'post_title' => 'Post-Title',
-                    'post_name' => 'Post-Name',
+                    'post_title' => __('Post-Title', 'dynamic-tags'),
+                    'post_name' => __('Post-Name', 'dynamic-tags'),
                 ],
             ]
         );
