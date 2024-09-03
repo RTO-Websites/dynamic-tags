@@ -57,6 +57,30 @@ class UserRole extends \Elementor\Core\DynamicTags\Tag {
                 'default' => ', ',
             ]
         );
+
+        $this->add_control(
+            'format',
+            [
+                'label' => __( 'Format', 'dynamic-tags' ),
+                'type' => Controls_Manager::SELECT,
+                'label_block' => true,
+                'default' => 'plain',
+                'options' => [
+                    'plain' => 'Plain',
+                    'human_readable' => 'Human readable',
+                    'translated' => 'Translated',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'addWrapper',
+            [
+                'label' => __( 'Add wrapper around items', 'dynamic-tags' ),
+                'type' => Controls_Manager::SWITCHER,
+                'default' => 'no',
+            ]
+        );
     }
 
     public function render(): void {
@@ -77,8 +101,44 @@ class UserRole extends \Elementor\Core\DynamicTags\Tag {
         }
         $separator = $this->get_settings( 'separator' ) ?? '';
         $userInfo = get_userdata( $userId );
-        $userRoles = implode( $separator, $userInfo->roles );
+
+
+        switch ($this->get_settings('format')) {
+            case 'human_readable':
+                global $wp_roles;
+                $roles = $wp_roles->get_names();
+                $rolesArray = [];
+                foreach ($userInfo->roles as $role) {
+                    $rolesArray[] = $roles[$role];
+                }
+                break;
+            case 'translated':
+                global $wp_roles;
+                $roles = $wp_roles->get_names();
+                $rolesArray = [];
+                foreach ($userInfo->roles as $role) {
+                    $rolesArray[] = translate_user_role($roles[$role]);
+                }
+
+                break;
+            case 'plain':
+            default:
+                $rolesArray = $userInfo->roles;
+                break;
+        }
+
+        if ($this->get_settings('addWrapper') === 'yes') {
+            foreach ($rolesArray as &$role) {
+                $role = '<span class="user-role">' . $role . '</span>';
+            }
+        }
+        
+        $userRoles = implode( $separator, $rolesArray );
+
         echo $userRoles;
     }
 
+    public function get_panel_template_setting_key(): string {
+        return 'key';
+    }
 }
