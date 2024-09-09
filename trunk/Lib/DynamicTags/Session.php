@@ -9,24 +9,24 @@ use ElementorPro\Modules\DynamicTags\Module;
 class Session extends \Elementor\Core\DynamicTags\Tag {
     use ElementBase;
 
-    public function get_name() {
+    public function get_name(): string {
         return 'dynamic-tags-session';
     }
 
-    public function get_title() {
+    public function get_title(): string {
         return __( 'Session', 'dynamic-tags' );
     }
 
 
-    public function get_group() {
+    public function get_group(): array {
         return [ Module::SITE_GROUP ];
     }
 
-    public function get_categories() {
+    public function get_categories(): array {
         return [ Module::TEXT_CATEGORY ];
     }
 
-    protected function register_controls() {
+    protected function register_controls(): void {
         $this->add_control(
             'SessionKey',
             [
@@ -36,10 +36,28 @@ class Session extends \Elementor\Core\DynamicTags\Tag {
                 'default' => '',
             ]
         );
+
+        $this->add_control(
+            'CustomSessionKey',
+            [
+                'label' => __( 'Custom Session Key', 'dynamic-tags' ),
+                'type' => Controls_Manager::TEXT,
+                'label_block' => true,
+                'default' => '',
+            ]
+        );
     }
 
-    public function render() {
+    public function render(): void {
         $settings = $this->get_settings();
+
+        $customKey = $settings['CustomSessionKey'];
+        if ( !empty( $customKey ) ) {
+            $value = filter_var( $_SESSION[$customKey] ?? '' );
+            echo wp_kses_post( $value );
+            return;
+        }
+
         $key = $settings['SessionKey'];
         if ( empty( $key ) || empty( $_SESSION[$key] ) ) {
             return;
