@@ -11,7 +11,7 @@ use DynamicTags\Lib\Deactivator;
  * Plugin Name:       DynamicTags
  * Plugin URI:        https://github.com/RTO-Websites/dynamic-tags/
  * Description:       Dynamic Tags is an Elementor addon that adds some useful dynamic tags.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Author:            RTO GmbH
  * Author URI:        https://www.rto.de
  * License:           GPL-2.0+
@@ -25,7 +25,7 @@ if ( !defined( 'WPINC' ) ) {
     die;
 }
 
-define( 'DynamicTags_VERSION', '1.3.0' );
+define( 'DynamicTags_VERSION', '1.4.0' );
 
 define( 'DynamicTags_DIR', str_replace( '\\', '/', __DIR__ ) );
 define( 'DynamicTags_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
