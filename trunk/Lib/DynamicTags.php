@@ -24,7 +24,7 @@ class DynamicTags {
         $this->setLocale();
         $this->defineElementorHooks();
 
-        if (is_admin()) {
+        if ( is_admin() ) {
             $this->defineAdminHooks();
         }
 
@@ -56,15 +56,20 @@ class DynamicTags {
         $this->loader->addAction( 'elementor/editor/before_enqueue_scripts', $this, 'enqueueScripts', 99999 );
     }
 
-    public function ajaxGetElementorData() :void {
-        $postid = filter_input(INPUT_GET, 'postid');
-        $output = self::getElementorWidgets($postid);
+    public function ajaxGetElementorData(): void {
+        if ( !current_user_can( 'edit_post' ) ) {
+            die();
+        }
+        $postid = filter_input( INPUT_GET, 'postid', FILTER_SANITIZE_NUMBER_INT );
+        $output = self::getElementorWidgets( $postid );
 
-        echo json_encode($output);
+        echo json_encode( $output );
         die();
     }
 
-    public static function getElementorWidgets($postid): array {
+    public static function getElementorWidgets( $postid ): array {
+        $postid = filter_var( $postid, FILTER_SANITIZE_NUMBER_INT );
+
         global $wpdb;
         $queryString = "
             SELECT
@@ -75,11 +80,11 @@ class DynamicTags {
 
         $allPosts = $wpdb->get_results( $queryString, OBJECT );
         $flatData = [];
-        self::makeElementorDataFlat( $flatData, json_decode($allPosts[0]->meta_value, true) );
+        self::makeElementorDataFlat( $flatData, json_decode( $allPosts[0]->meta_value, true ) );
 
         $output = [];
-        foreach ($flatData as $widgetId => $widget) {
-            $output[$widgetId] = $widget['widgetType'] . ' ('.$widgetId.')';
+        foreach ( $flatData as $widgetId => $widget ) {
+            $output[$widgetId] = $widget['widgetType'] . ' (' . $widgetId . ')';
         }
 
         return $output;
