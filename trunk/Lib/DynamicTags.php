@@ -57,7 +57,7 @@ class DynamicTags {
     }
 
     public function ajaxGetElementorData(): void {
-        if ( !current_user_can( 'edit_post' ) ) {
+        if ( !current_user_can( 'edit_posts' ) ) {
             die();
         }
         $postid = filter_input( INPUT_GET, 'postid', FILTER_SANITIZE_NUMBER_INT );

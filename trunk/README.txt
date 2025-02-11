@@ -3,8 +3,8 @@ Contributors: rtowebsites
 Donate link: https://www.rto.de/
 Tags: elementor, dynamic tags
 Requires at least: 5.0
-Tested up to: 6.6
-Stable tag: 1.4.0
+Tested up to: 6.7
+Stable tag: 1.4.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -53,6 +53,9 @@ It provides the following tags:
 
 
 == Changelog ==
+= 1.4.1 =
+* Fix potential security issue
+
 = 1.4.0 =
 * Add singular/plural for post-types
 * Add human-readable and translated for user-roles
